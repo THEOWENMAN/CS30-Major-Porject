@@ -3,8 +3,6 @@
 ## Description
 Tussle Galaxy: A 3 v 3 multiplayer 2D shooter game inspired by Brawl Stars. The Game will be coded with p5.js and p5.party; players will join a shared lobby and battle using their unique characters.
 
-p5 party players versing eachother
-
 ## Needs to have List
 - Multiplayer (p5.Party): Real-time 3v3 battles with players join via other devices.
 - Map/Mode: Incorporate a simple map that allows player movenment and shooting, while having multiple obstacles. 

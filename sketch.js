@@ -1,4 +1,4 @@
-// Project Title
+// CS30 Major Project: Tussle Galaxy
 // Your Name
 // Date
 //
