@@ -6,97 +6,26 @@
 // // - describe what you did to take this project "above and beyond"
 
 
-// let guests, shared, my;
-// let bulletsArray = [];
-
-// function preload(){
-//   partyConnect("wss://demoserver.p5Party.org");
-//   shared = partyLoadShared("shared", {bullets: []});
-//   my = partyLoadMyShared();
-//   guests = partyLoadGuestShareds();
-// }
-
-// function setup() {
-//   createCanvas(windowWidth, windowHeight);
-//   my.longRangeCharacter = {x: random(width), y: random(height), HP: 50,};
-//   my.mediumRangeCharacter = {x: random(width), y: random(height), HP: 70,};
-//   my.shortRangeCharacter = {x: random(width), y: random(height), HP: 100,};
-//   partySubscribe("createBullet", onCreateBullet);
-//   startGame();
-// }
-
-// function draw() {
-//   background(220);
-//   for (let p of guests){
-//     drawCharacter(p.longRangeCharacter, "red");
-//     drawCharacter(p.mediumRangeCharacter, "orange");
-//     drawCharacter(p.shortRangeCharacter, "yellow");
-//   }
-
-//   drawCharacter(my.longRangeCharacter, "blue");
-//   drawCharacter(my.mediumRangeCharacter, "blue");
-//   drawCharacter(my.shortRangeCharacter, "blue");
-
-//   for(let b of shared.bullets){
-//     ellipse(b.x,b.y, 10);
-//   }
-// }
-
-// function drawCharacter(character, color){
-//   if(!character){
-//     return;
-//   }
-//   fill(color);
-//   ellipse(character.x, character.y, 40);
-//   fill(0);
-//   text("HP:" + character.HP, character.x, character.y + 30);
-// }
-
-// function startGame(){
-//   shared.bullets.forEach(stepBullet);
-// }
-
-// function stepBullet(b){
-//   b.x += b.dx;
-//   b.y += b.dy;
-// }
-
-// function mousePressed(){
-//   createBullet(my.longRangeCharacter.x, my.longRangeCharacter, mouseX, mouseY);
-// }
-
-// function createBullet(){
-//   let direction = createVector(mouseX - my.longRangeCharacter.x, mouseY - my.longRangeCharacter.y);
-//   direction.normalize();
-//   direction.mult(4);
-//   let position = createVector(my.longRangeCharacter.x, my.longRangeCharacter.y);
-//   position.x += direction.x * (40/4);
-//   position.y += direction.y * (40/4);
-//   let bullet = {
-//     pos: position,
-//     vel: direction,
-//   };
-//   bulletsArray.push(bullet);
 
 
 
 
 
-// }
-
-// function onCreateBullet(){
-//   shared.bullets.push(bullet);
-// }
-
-
-
+// land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
+// splice bullet so not laggy
 
 
 let guests, shared, my;
 let color;
+let grid, rows, cols;
+let grassImg;
+let pathImg;
 
 const MOVEMENT = 3;
 const DIAMETERPLAYER = 40;
+const CELL_SIZE = 60;
+const OPEN_TILE = 0;
+const OPEN_TILE_TWO = 1;
 
 
 function preload(){
@@ -104,11 +33,17 @@ function preload(){
   shared = partyLoadShared("shared", {bullets: []});
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
+  grassImg = loadImage("grass.png");
+  pathImg = loadImage("grass_2.webp");
+
 };
 
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
+  cols = Math.ceil(width/CELL_SIZE);
+  rows = Math.ceil(height/CELL_SIZE);
+  grid = generateRandomGrid(cols, rows);
   my.character = {x: random(width), y: random(height), HP: 100,};
   partySubscribe("createBullet", onCreateBullet);
 };
@@ -116,28 +51,60 @@ function setup(){
 function draw(){
   background(220);
   moveMyCharacter();
-
-  // if(!shared.players){
-  //   shared.players = {};
-  // }
-  // shared.players[my.partyId] = my.character;
-  
+  displayGrid();
 
   if (partyIsHost()){
     startGame();
   }
-
-  drawCharacter(my.character,"blue");
-
   for (let guest of guests){
     if (guest.character){
       drawCharacter(guest.character, "red");
+    }
+    else{
+      drawCharacter(my.character,"blue");
     }
   }
   for(let bullet of shared.bullets){
     ellipse(bullet.pos.x, bullet.pos.y, 10);
   }
 };
+
+function displayGrid(){
+  for (let y = 0; y < rows; y++){
+    for (let x = 0; x < cols; x++){
+      if (grid[y][x] === OPEN_TILE){
+        image(pathImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE. CELL_SIZE);
+      }
+      else if(grid[y][x] === OPEN_TILE_TWO){
+        image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+    }
+  }
+}
+
+function generateRandomGrid(cols, rows) {
+  let newGrid = [];
+  for (let y = 0; y < rows; y++) {
+    newGrid.push([]);
+    for (let x = 0; x < cols; x++) {
+      //toss a 0 or 1 in randomly
+      if (random(100) < 50) {
+        newGrid[y].push(OPEN_TILE);
+      }
+      else {
+        newGrid[y].push(OPEN_TILE_TWO);
+      }
+    }
+  }
+  return newGrid;
+}
+
+
+
+
+
+
+
 
 function startGame(){
   for(let bullet of shared.bullets){
@@ -207,3 +174,7 @@ function moveMyCharacter(){
     my.character.y = DIAMETERPLAYER/2;
   } 
 }
+
+
+
+
