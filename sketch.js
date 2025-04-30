@@ -28,7 +28,7 @@ function preload(){
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
-  pathImg = loadImage("grass_2.webp");
+  pathImg = loadImage("Grass Texture 1.jpg");
 
 };
 
