@@ -58,9 +58,9 @@ function draw(){
   if (partyIsHost()){
     drawCharacter(my.character,"blue");
   }
-  else{
-    drawCharacter(my.character,"red");
-  }
+  // else{
+  //   drawCharacter(my.character,"red");
+  // }
   for(let bullet of shared.bullets){
     ellipse(bullet.pos.x, bullet.pos.y, 10);
   }
