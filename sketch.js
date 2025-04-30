@@ -5,12 +5,6 @@
 // // Extra for Experts:
 // // - describe what you did to take this project "above and beyond"
 
-
-
-
-
-
-
 // land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
 // splice bullet so not laggy
 
@@ -92,7 +86,7 @@ function draw(){
   
   if (partyIsHost()){
     for (let i = shared.bullets.length - 1; i >= 0; i --){
-      if (millis() - shared.bullets[i].bulletCreatedTime > waitTime){
+      if (millis() - shared.bullets[i].bulletCreatedTime > waitTimer){
         shared.bullets.splice(i, 1);
       }
     }
