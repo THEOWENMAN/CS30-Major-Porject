@@ -60,20 +60,53 @@ function draw(){
     if (guest.character){
       drawCharacter(guest.character, "red");
     }
-    else{
-      drawCharacter(my.character,"blue");
-    }
+  }
+  if (partyIsHost()){
+    drawCharacter(my.character,"blue");
+  }
+  else{
+    drawCharacter(my.character,"red");
   }
   for(let bullet of shared.bullets){
     ellipse(bullet.pos.x, bullet.pos.y, 10);
   }
+
+  let waitTimer = 2000;
+  let lastSwitchedTime = 0;
+  let opacity = 255;
+  
+  for (let bullet of shared.bullets){
+    let lifeTime = millis() - bullet.bulletCreatedTime;
+  
+    
+    if (lifeTime > waitTimer){
+      fill(0,0,0,0);
+    }
+    else{
+      opacity = 255 -  lifeTime / waitTimer * opacity;
+      fill(0,0,0,opacity);
+    }
+    noStroke();
+    ellipse(bullet.pos.x, bullet.pos.y, 10);
+  }
+  
+  if (partyIsHost()){
+    for (let i = shared.bullets.length - 1; i >= 0; i --){
+      if (millis() - shared.bullets[i].bulletCreatedTime > waitTime){
+        shared.bullets.splice(i, 1);
+      }
+    }
+  }
+  fill(0);
+  textSize(16);
+  text("HP: " + my.character.HP, 20, 30);
 };
 
 function displayGrid(){
   for (let y = 0; y < rows; y++){
     for (let x = 0; x < cols; x++){
       if (grid[y][x] === OPEN_TILE){
-        image(pathImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE. CELL_SIZE);
+        image(pathImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if(grid[y][x] === OPEN_TILE_TWO){
         image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -98,6 +131,15 @@ function generateRandomGrid(cols, rows) {
   }
   return newGrid;
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -143,6 +185,7 @@ function createBullet(){
   return{
     pos: {x: position.x, y: position.y},
     vel: {x: direction.x, y: direction.y},
+    bulletCreatedTime: millis(),
   };
 
 }
