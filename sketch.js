@@ -10,7 +10,6 @@
 
 
 let guests, shared, my;
-let color;
 let grid, rows, cols;
 let grassImg;
 let pathImg;
@@ -38,7 +37,7 @@ function setup(){
   cols = Math.ceil(width/CELL_SIZE);
   rows = Math.ceil(height/CELL_SIZE);
   grid = generateRandomGrid(cols, rows);
-  my.character = {x: random(width), y: random(height), HP: 100,};
+  my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
 };
 
@@ -47,50 +46,38 @@ function draw(){
   moveMyCharacter();
   displayGrid();
 
-  if (partyIsHost()){
-    startGame();
-  }
+  let hostId = partyIsHost();
+ 
+
+  drawCharacter(my.character, "blue");
   for (let guest of guests){
-    if (guest.character){
+    if(guest.character){
       drawCharacter(guest.character, "red");
     }
   }
-  if (partyIsHost()){
-    drawCharacter(my.character,"blue");
-  }
-  // else{
-  //   drawCharacter(my.character,"red");
-  // }
-  for(let bullet of shared.bullets){
-    ellipse(bullet.pos.x, bullet.pos.y, 10);
-  }
 
-  let waitTimer = 2000;
-  let lastSwitchedTime = 0;
-  let opacity = 255;
   
-  for (let bullet of shared.bullets){
-    let lifeTime = millis() - bullet.bulletCreatedTime;
+
+
+  if (partyIsHost()){
+    startGame();
+  }
   
-    
-    if (lifeTime > waitTimer){
-      fill(0,0,0,0);
-    }
-    else{
-      opacity = 255 -  lifeTime / waitTimer * opacity;
-      fill(0,0,0,opacity);
-    }
+  
+  
+  for(let bullet of shared.bullets){
+    bullet.opacity -= 5;
+    fill(0,0,0,bullet.opacity);
     noStroke();
     ellipse(bullet.pos.x, bullet.pos.y, 10);
   }
-  
-  if (partyIsHost()){
-    for (let i = shared.bullets.length - 1; i >= 0; i --){
-      if (millis() - shared.bullets[i].bulletCreatedTime > waitTimer){
-        shared.bullets.splice(i, 1);
-      }
+
+  for (let i = shared.bullets.length - 1; i >= 0; i --){
+    if (shared.bullets[i].opacity <= 0){
+      shared.bullets.splice(i, 1);
     }
   }
+
   fill(0);
   textSize(16);
   text("HP: " + my.character.HP, 20, 30);
@@ -154,6 +141,7 @@ function stepBullet(bullet){
 }
 
 function onCreateBullet(bullet){
+  console.log("bullet", bullet);
   if(partyIsHost()){
     shared.bullets.push(bullet);
   }
@@ -165,6 +153,7 @@ function drawCharacter(character, color){
 }
 
 function mousePressed(){
+  console.log("mouse is pressed");
   let bullet = createBullet();
   partyEmit("createBullet", bullet);
 }
@@ -179,7 +168,7 @@ function createBullet(){
   return{
     pos: {x: position.x, y: position.y},
     vel: {x: direction.x, y: direction.y},
-    bulletCreatedTime: millis(),
+    opacity: 255,
   };
 
 }
