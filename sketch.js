@@ -13,6 +13,11 @@ let guests, shared, my;
 let grid, rows, cols;
 let grassImg;
 let pathImg;
+let x;
+let y;
+
+
+
 
 const MOVEMENT = 3;
 const DIAMETERPLAYER = 40;
@@ -45,13 +50,12 @@ function draw(){
   background(220);
   moveMyCharacter();
   displayGrid();
-
-  let hostId = partyIsHost();
- 
-
+  // playerHPChange();
+  // character has one my and guest character.
   drawCharacter(my.character, "blue");
   for (let guest of guests){
     if(guest.character){
+      console.log(guest.character);
       drawCharacter(guest.character, "red");
     }
   }
@@ -110,22 +114,6 @@ function generateRandomGrid(cols, rows) {
   return newGrid;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function startGame(){
   for(let bullet of shared.bullets){
     stepBullet(bullet);
@@ -145,6 +133,7 @@ function onCreateBullet(bullet){
 }
 
 function drawCharacter(character, color){
+  // console.log(color);
   fill(color);
   ellipse(character.x, character.y, 40);
 }
@@ -224,11 +213,12 @@ function playerHPChange(){
       break;
     }
   }
-
   if (bullet.hit){
     shared.bullets.splice(i, 1);
   }
+  
 }
+
 
 
 
