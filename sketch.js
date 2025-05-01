@@ -56,9 +56,6 @@ function draw(){
     }
   }
 
-  
-
-
   if (partyIsHost()){
     startGame();
   }
