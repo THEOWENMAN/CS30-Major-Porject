@@ -201,3 +201,35 @@ function moveMyCharacter(){
 
 
 
+
+function playerHPChange(){
+  let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+  let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+  for(let i = shared.bullets.length - 1; i >= 0; i--){
+    let bullet = shared.bullets[i];
+  }
+
+  for(let guest of guests){
+    if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
+      guest.character.HP -=20;
+      bullet.hit = true;
+      break;
+    }
+  }
+
+  for(let guest of guests){
+    if (guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
+      my.character.HP -=20;
+      bullet.hit = true;
+      break;
+    }
+  }
+
+  if (bullet.hit){
+    shared.bullets.splice(i, 1);
+  }
+}
+
+
+
+
