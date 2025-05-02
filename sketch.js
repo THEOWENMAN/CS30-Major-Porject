@@ -15,6 +15,8 @@ let grassImg;
 let pathImg;
 let x;
 let y;
+let bullet_hit;
+let bullet;
 
 
 
@@ -52,7 +54,7 @@ function draw(){
   displayGrid();
   // playerHPChange();
   // character has one my and guest character.
-  drawCharacter(my.character, "blue");
+  // drawCharacter(my.character, "blue");
   for (let guest of guests){
     if(guest.character){
       console.log(guest.character);
@@ -64,10 +66,8 @@ function draw(){
     startGame();
   }
   
-  
-  
   for(let bullet of shared.bullets){
-    bullet.opacity -= 5;
+    bullet.opacity -= 2;
     fill(0,0,0,bullet.opacity);
     noStroke();
     ellipse(bullet.pos.x, bullet.pos.y, 10);
@@ -77,6 +77,9 @@ function draw(){
     if (shared.bullets[i].opacity <= 0){
       shared.bullets.splice(i, 1);
     }
+    // if (bullet_hit){
+    //   shared.bullets.splice(i, 1);
+    // }
   }
 
   fill(0);
@@ -191,33 +194,40 @@ function moveMyCharacter(){
 
 
 
-function playerHPChange(){
-  let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-  let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-  for(let i = shared.bullets.length - 1; i >= 0; i--){
-    let bullet = shared.bullets[i];
-  }
+// function playerHPChange(){
+//   let bullet_hit = false;
+//   for(let bullet of shared.bullets){
+//     if(dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y) < DIAMETERPLAYER/2){
+//       my.character.HP -=1;
+//       bullet_hit = true;
+//       break;
+//     }
+//   }
 
-  for(let guest of guests){
-    if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
-      guest.character.HP -=20;
-      bullet.hit = true;
-      break;
-    }
-  }
-
-  for(let guest of guests){
-    if (guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
-      my.character.HP -=20;
-      bullet.hit = true;
-      break;
-    }
-  }
-  if (bullet.hit){
-    shared.bullets.splice(i, 1);
-  }
+  // for(let i = shared.bullets.length - 1; i >= 0; i--){
+  //   let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+  //   let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+  //   let bullet = shared.bullets[i];
+  //   for(let guest of guests){
+  //     if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
+  //       guest.character.HP -=20;
+  //       bullet.hit = true;
+  //       break;
+  //     }
+  //   }
+  //   for(let guest of guests){
+  //     if (!guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
+  //       my.character.HP -=20;
+  //       bullet.hit = true;
+  //       break;
+  //     }
+  //   }
+  //   if (bullet.hit){
+  //     shared.bullets.splice(i, 1);
+  //   }
+  // }
   
-}
+
 
 
 
