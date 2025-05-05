@@ -6,7 +6,7 @@
 // // - describe what you did to take this project "above and beyond"
 
 // land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
-// splice bullet so not laggy
+// https://www.google.com/url?sa=i&url=https%3A%2F%2Fx.com%2FAshClashYT%2Fstatus%2F1247935700911239169&psig=AOvVaw2f7hXbBRXKyqpEXrldXI4V&ust=1746560725130000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiHyPKLjY0DFQAAAAAdAAAAABAk
 
 
 let guests, shared, my;
@@ -17,13 +17,15 @@ let x;
 let y;
 let bullet_hit;
 let bullet;
+// make player draw left one, then draw right one
+let state = "right";
 
 
 
 
 const MOVEMENT = 3;
 const DIAMETERPLAYER = 40;
-const CELL_SIZE = 60;
+const CELL_SIZE = 40;
 const OPEN_TILE = 0;
 const OPEN_TILE_TWO = 1;
 
@@ -41,8 +43,8 @@ function preload(){
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
-  cols = Math.ceil(width/CELL_SIZE);
-  rows = Math.ceil(height/CELL_SIZE);
+  cols = Math.ceil(width/CELL_SIZE-1);
+  rows = Math.ceil(height/CELL_SIZE-0.5);
   grid = generateRandomGrid(cols, rows);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
@@ -65,6 +67,11 @@ function draw(){
   if (partyIsHost()){
     startGame();
   }
+  // make the map sideways/ horizontal
+  square(120,40,40);
+  square(120,80,40);
+  square(120,120,40);
+  square(1440,600,40);
   
   for(let bullet of shared.bullets){
     bullet.opacity -= 2;
@@ -105,8 +112,7 @@ function generateRandomGrid(cols, rows) {
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
-      //toss a 0 or 1 in randomly
-      if (random(100) < 50) {
+      if ((x+y) % 2 === 0) {
         newGrid[y].push(OPEN_TILE);
       }
       else {
