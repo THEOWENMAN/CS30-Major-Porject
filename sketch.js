@@ -43,8 +43,8 @@ function preload(){
 
 function setup(){
   createCanvas(windowWidth, windowHeight);
-  cols = Math.ceil(width/CELL_SIZE-1);
-  rows = Math.ceil(height/CELL_SIZE-0.5);
+  cols = Math.ceil(30);
+  rows = Math.ceil(18);
   grid = generateRandomGrid(cols, rows);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
@@ -68,10 +68,7 @@ function draw(){
     startGame();
   }
   // make the map sideways/ horizontal
-  square(120,40,40);
-  square(120,80,40);
-  square(120,120,40);
-  square(1440,600,40);
+
   
   for(let bullet of shared.bullets){
     bullet.opacity -= 2;
@@ -88,6 +85,8 @@ function draw(){
     //   shared.bullets.splice(i, 1);
     // }
   }
+
+  drawBarriersWall();
 
   fill(0);
   textSize(16);
@@ -107,7 +106,7 @@ function displayGrid(){
   }
 }
 
-function generateRandomGrid(cols, rows) {
+function generateRandomGrid() {
   let newGrid = [];
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
@@ -233,6 +232,37 @@ function moveMyCharacter(){
   //   }
   // }
   
+
+
+
+
+
+
+
+
+
+// could add bushes and when player enter make their opacity   
+function drawBarriersWall(){
+  fill(0);
+  stroke("white");
+  square(120,40,40);
+  square(120,80,40);
+  square(120,120,40);
+  square(1440,600,40);
+  square(1440,640,40);
+  square(1440,680,40);
+}
+
+function drawBarriersWallCrates(){
+  fill("brown");
+  stroke("white");
+  square(120,40,40);
+  square(120,80,40);
+  square(120,120,40);
+  square(1440,600,40);
+  square(1440,640,40);
+  square(1440,680,40);
+}
 
 
 
