@@ -6,6 +6,14 @@
 // // - describe what you did to take this project "above and beyond"
 
 // land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
+// make player draw left one, then draw right one
+// center the battle field, so change all the obstacles and restriction to releative
+// fix the bullet hp change
+// make a start screen; when 2 players are in, can click start and others can't join until round is over
+
+
+
+
 // https://www.google.com/url?sa=i&url=https%3A%2F%2Fx.com%2FAshClashYT%2Fstatus%2F1247935700911239169&psig=AOvVaw2f7hXbBRXKyqpEXrldXI4V&ust=1746560725130000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiHyPKLjY0DFQAAAAAdAAAAABAk
 
 
@@ -17,8 +25,9 @@ let x;
 let y;
 let bullet_hit;
 let bullet;
-// make player draw left one, then draw right one
 let state = "right";
+
+let newGrid = [];
 
 
 
@@ -45,7 +54,7 @@ function setup(){
   createCanvas(windowWidth, windowHeight);
   cols = Math.ceil(30);
   rows = Math.ceil(18);
-  grid = generateRandomGrid(cols, rows);
+  grid = generateRandomGrid(cols*CELL_SIZE, rows * CELL_SIZE);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
 };
@@ -102,12 +111,16 @@ function displayGrid(){
       else if(grid[y][x] === OPEN_TILE_TWO){
         image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
+      else if(grid[y][x] === 2)
+      {
+        fill(0);
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+      }
     }
   }
 }
 
 function generateRandomGrid() {
-  let newGrid = [];
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
@@ -119,8 +132,21 @@ function generateRandomGrid() {
       }
     }
   }
+  obstacles();
   return newGrid;
 }
+
+
+
+
+
+
+function obstacles(){
+
+  newGrid[3][3] = 2;
+
+}
+
 
 function startGame(){
   for(let bullet of shared.bullets){
@@ -245,24 +271,12 @@ function moveMyCharacter(){
 function drawBarriersWall(){
   fill(0);
   stroke("white");
-  square(120,40,40);
-  square(120,80,40);
-  square(120,120,40);
   square(1440,600,40);
   square(1440,640,40);
   square(1440,680,40);
 }
 
-function drawBarriersWallCrates(){
-  fill("brown");
-  stroke("white");
-  square(120,40,40);
-  square(120,80,40);
-  square(120,120,40);
-  square(1440,600,40);
-  square(1440,640,40);
-  square(1440,680,40);
-}
+
 
 
 

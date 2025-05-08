@@ -20,6 +20,7 @@ Tussle Galaxy: A multiplayer 2D shooter game inspired by Brawl Stars. The Game w
 - Emotes: Emotes or sprays 
 - 3 Different Characters: Each charater will have unique shooting mechanics (eg, spread shot, long-range, burst, single, etc) and different movement patterns or speeds.
 - Sound Effects additional: Different sound effects for each type of character shooting and self recorded voice lines.
+- Start Screen: When at least two players join the game will show start screen and countdown, when players are in play, others can't join 
 
 
 
