@@ -6,9 +6,11 @@
 // // - describe what you did to take this project "above and beyond"
 
 // land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
-// make player draw left one, then draw right one
+// make player draw left one, then draw right one, same for the color
 // center the battle field, so change all the obstacles and restriction to releative
 // fix the bullet hp change
+
+
 // make a start screen; when 2 players are in, can click start and others can't join until round is over
 
 
@@ -51,9 +53,9 @@ function preload(){
 
 
 function setup(){
-  createCanvas(windowWidth, windowHeight);
-  cols = Math.ceil(30);
-  rows = Math.ceil(18);
+  createCanvas(34*CELL_SIZE, 20 * CELL_SIZE);
+  cols = Math.ceil(34);
+  rows = Math.ceil(20);
   grid = generateRandomGrid(cols*CELL_SIZE, rows * CELL_SIZE);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
@@ -111,9 +113,12 @@ function displayGrid(){
       else if(grid[y][x] === OPEN_TILE_TWO){
         image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      else if(grid[y][x] === 2)
-      {
+      else if(grid[y][x] === 2){
         fill(0);
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+      }
+      else if(grid[y][x] === 3){
+        fill(255);
         square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
     }
@@ -142,9 +147,58 @@ function generateRandomGrid() {
 
 
 function obstacles(){
-
+  // first walls
+  newGrid[1][3] = 2;
+  newGrid[2][3] = 2;
   newGrid[3][3] = 2;
+  newGrid[4][3] = 2;
 
+  newGrid[15][30] = 2;
+  newGrid[16][30] = 2;
+  newGrid[17][30] = 2;
+  newGrid[18][30] = 2;
+  
+  
+
+  // second layer
+  newGrid[15][5] = 3;
+  newGrid[16][5] = 3;
+  newGrid[17][5] = 3;
+  newGrid[16][6] = 3;
+  newGrid[17][6] = 3;
+
+  newGrid[2][28] = 3;
+  newGrid[3][28] = 3;
+  newGrid[4][28] = 3;
+  newGrid[2][27] = 3;
+  newGrid[3][27] = 3;
+
+  // third layer
+  newGrid[7][24] = 3;
+  newGrid[7][25] = 3;
+  newGrid[8][24] = 3;
+  newGrid[8][25] = 3;
+
+  newGrid[11][8] = 3;
+  newGrid[11][9] = 3;
+  newGrid[12][8] = 3;
+  newGrid[12][9] = 3;
+
+  // fourth layer
+
+  newGrid[0][12] = 3;
+  newGrid[1][12] = 3;
+  newGrid[2][12] = 3;
+  newGrid[3][12] = 3;
+  newGrid[4][12] = 3;
+  newGrid[5][12] = 3;
+
+  newGrid[0][11] = 3;
+  newGrid[1][11] = 3;
+  newGrid[2][11] = 3;
+  newGrid[3][11] = 3;
+  newGrid[4][11] = 3;
+  newGrid[5][11] = 3;
 }
 
 
@@ -189,6 +243,7 @@ function createBullet(){
     pos: {x: position.x, y: position.y},
     vel: {x: direction.x, y: direction.y},
     opacity: 255,
+    createrId: partyId,
   };
 
 }
@@ -235,28 +290,29 @@ function moveMyCharacter(){
 //     }
 //   }
 
-  // for(let i = shared.bullets.length - 1; i >= 0; i--){
-  //   let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-  //   let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-  //   let bullet = shared.bullets[i];
-  //   for(let guest of guests){
-  //     if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
-  //       guest.character.HP -=20;
-  //       bullet.hit = true;
-  //       break;
-  //     }
-  //   }
-  //   for(let guest of guests){
-  //     if (!guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
-  //       my.character.HP -=20;
-  //       bullet.hit = true;
-  //       break;
-  //     }
-  //   }
-  //   if (bullet.hit){
-  //     shared.bullets.splice(i, 1);
-  //   }
-  // }
+//   for(let i = shared.bullets.length - 1; i >= 0; i--){
+//     let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+//     let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+//     let bullet = shared.bullets[i];
+//     for(let guest of guests){
+//       if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
+//         guest.character.HP -=20;
+//         bullet.hit = true;
+//         break;
+//       }
+//     }
+//     for(let guest of guests){
+//       if (!guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
+//         my.character.HP -=20;
+//         bullet.hit = true;
+//         break;
+//       }
+//     }
+//     if (bullet.hit){
+//       shared.bullets.splice(i, 1);
+//     }
+//   }
+// }
   
 
 
@@ -268,13 +324,7 @@ function moveMyCharacter(){
 
 
 // could add bushes and when player enter make their opacity   
-function drawBarriersWall(){
-  fill(0);
-  stroke("white");
-  square(1440,600,40);
-  square(1440,640,40);
-  square(1440,680,40);
-}
+
 
 
 
