@@ -35,7 +35,7 @@ let newGrid = [];
 
 
 const MOVEMENT = 3;
-const DIAMETERPLAYER = 40;
+const DIAMETERPLAYER = 30;
 const CELL_SIZE = 40;
 const OPEN_TILE = 0;
 const OPEN_TILE_TWO = 1;
@@ -53,10 +53,10 @@ function preload(){
 
 
 function setup(){
-  createCanvas(34*CELL_SIZE, 20 * CELL_SIZE);
+  createCanvas(34*CELL_SIZE, 18 * CELL_SIZE);
   cols = Math.ceil(34);
-  rows = Math.ceil(20);
-  grid = generateRandomGrid(cols*CELL_SIZE, rows * CELL_SIZE);
+  rows = Math.ceil(18);
+  grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
 };
@@ -96,8 +96,6 @@ function draw(){
     //   shared.bullets.splice(i, 1);
     // }
   }
-
-  drawBarriersWall();
 
   fill(0);
   textSize(16);
@@ -153,25 +151,26 @@ function obstacles(){
   newGrid[3][3] = 2;
   newGrid[4][3] = 2;
 
+  newGrid[13][30] = 2;
+  newGrid[14][30] = 2;
   newGrid[15][30] = 2;
   newGrid[16][30] = 2;
-  newGrid[17][30] = 2;
-  newGrid[18][30] = 2;
+
   
   
 
   // second layer
+  newGrid[13][5] = 3;
+  newGrid[14][5] = 3;
   newGrid[15][5] = 3;
-  newGrid[16][5] = 3;
-  newGrid[17][5] = 3;
+  newGrid[15][6] = 3;
   newGrid[16][6] = 3;
-  newGrid[17][6] = 3;
 
   newGrid[2][28] = 3;
   newGrid[3][28] = 3;
   newGrid[4][28] = 3;
   newGrid[2][27] = 3;
-  newGrid[3][27] = 3;
+  newGrid[1][27] = 3;
 
   // third layer
   newGrid[7][24] = 3;
@@ -179,10 +178,10 @@ function obstacles(){
   newGrid[8][24] = 3;
   newGrid[8][25] = 3;
 
-  newGrid[11][8] = 3;
-  newGrid[11][9] = 3;
-  newGrid[12][8] = 3;
-  newGrid[12][9] = 3;
+  newGrid[9][8] = 3;
+  newGrid[9][9] = 3;
+  newGrid[10][8] = 3;
+  newGrid[10][9] = 3;
 
   // fourth layer
 
@@ -199,6 +198,27 @@ function obstacles(){
   newGrid[3][11] = 3;
   newGrid[4][11] = 3;
   newGrid[5][11] = 3;
+
+
+
+
+  newGrid[12][22] = 3;
+  newGrid[13][22] = 3;
+  newGrid[14][22] = 3;
+  newGrid[15][22] = 3;
+  newGrid[16][22] = 3;
+  newGrid[17][22] = 3;
+
+  newGrid[12][21] = 3;
+  newGrid[13][21] = 3;
+  newGrid[14][21] = 3;
+  newGrid[15][21] = 3;
+  newGrid[16][21] = 3;
+  newGrid[17][21] = 3;
+
+
+
+
 }
 
 
@@ -243,7 +263,7 @@ function createBullet(){
     pos: {x: position.x, y: position.y},
     vel: {x: direction.x, y: direction.y},
     opacity: 255,
-    createrId: partyId,
+    // createrId: partyId,
   };
 
 }
