@@ -48,30 +48,32 @@ function preload(){
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
   pathImg = loadImage("Grass Texture 1.jpg");
-
 };
 
 
 function setup(){
-  createCanvas(34*CELL_SIZE, 18 * CELL_SIZE);
+  createCanvas(34 * CELL_SIZE, 18 * CELL_SIZE);
   cols = Math.ceil(34);
   rows = Math.ceil(18);
   grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
   my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
+  my.id = Math.floor(Math.random()*100000);
 };
 
 function draw(){
   background(220);
   moveMyCharacter();
   displayGrid();
-  // playerHPChange();
+  playerHPChange();
   // character has one my and guest character.
   // drawCharacter(my.character, "blue");
   for (let guest of guests){
     if(guest.character){
-      console.log(guest.character);
       drawCharacter(guest.character, "red");
+      fill(0);
+      textSize(16);
+      text("HP: " + guest.character.HP, guest.character.x + 20, guest.character.y + 20);
     }
   }
 
@@ -92,14 +94,7 @@ function draw(){
     if (shared.bullets[i].opacity <= 0){
       shared.bullets.splice(i, 1);
     }
-    // if (bullet_hit){
-    //   shared.bullets.splice(i, 1);
-    // }
   }
-
-  fill(0);
-  textSize(16);
-  text("HP: " + my.character.HP, 20, 30);
 };
 
 function displayGrid(){
@@ -263,7 +258,7 @@ function createBullet(){
     pos: {x: position.x, y: position.y},
     vel: {x: direction.x, y: direction.y},
     opacity: 255,
-    // createrId: partyId,
+    creatorId: my.id,
   };
 
 }
@@ -282,14 +277,14 @@ function moveMyCharacter(){
     my.character.x+=MOVEMENT;
   }
   
-  if (my.character.x + DIAMETERPLAYER/2 > width){
-    my.character.x = width - DIAMETERPLAYER/2;
+  if (my.character.x + DIAMETERPLAYER/2 > cols *CELL_SIZE){
+    my.character.x = cols *CELL_SIZE - DIAMETERPLAYER/2;
   } 
   else if (my.character.x - DIAMETERPLAYER/2 < 0){
     my.character.x = DIAMETERPLAYER/2;
   } 
-  else if (my.character.y + DIAMETERPLAYER/2 > height){
-    my.character.y = height - DIAMETERPLAYER/2;
+  else if (my.character.y + DIAMETERPLAYER/2 > rows * CELL_SIZE){
+    my.character.y = rows * CELL_SIZE - DIAMETERPLAYER/2;
   } 
   else if (my.character.y - DIAMETERPLAYER/2 < 0){
     my.character.y = DIAMETERPLAYER/2;
@@ -300,39 +295,35 @@ function moveMyCharacter(){
 
 
 
-// function playerHPChange(){
-//   let bullet_hit = false;
-//   for(let bullet of shared.bullets){
-//     if(dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y) < DIAMETERPLAYER/2){
-//       my.character.HP -=1;
-//       bullet_hit = true;
-//       break;
-//     }
-//   }
+function playerHPChange(){
+  for(let i = shared.bullets.length - 1; i >= 0; i--){
+    let bullet = shared.bullets[i];
+    let bullet_hit = false;
 
-//   for(let i = shared.bullets.length - 1; i >= 0; i--){
-//     let distanceFromGuest = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-//     let distanceFromPlayer = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-//     let bullet = shared.bullets[i];
-//     for(let guest of guests){
-//       if (guest.character && distanceFromGuest < DIAMETERPLAYER/2){
-//         guest.character.HP -=20;
-//         bullet.hit = true;
-//         break;
-//       }
-//     }
-//     for(let guest of guests){
-//       if (!guest.character && distanceFromPlayer < DIAMETERPLAYER/2){
-//         my.character.HP -=20;
-//         bullet.hit = true;
-//         break;
-//       }
-//     }
-//     if (bullet.hit){
-//       shared.bullets.splice(i, 1);
-//     }
-//   }
-// }
+    if(bullet.creatorId !== my.id && my.character.HP > 0){
+      if(dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y)< DIAMETERPLAYER/2){
+        my.character.HP -= 10;
+        bullet_hit = true;
+      }
+    }
+
+    for(let guest of guests){
+      if(guest.character && guest.character.HP > 0 && bullet.creatorId !== my.id && dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y) < DIAMETERPLAYER/2){
+        guest.character.HP -= 10;
+        bullet_hit = true;
+      }
+    }
+    if(bullet_hit){
+      shared.bullets.splice(i, 1);
+    }
+  }
+}
+
+  
+  
+  
+  
+  
   
 
 
