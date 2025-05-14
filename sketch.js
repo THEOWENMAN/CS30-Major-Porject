@@ -130,6 +130,7 @@ function generateRandomGrid() {
       }
     }
   }
+  stroke("black");
   obstacles();
   return newGrid;
 }
@@ -196,7 +197,7 @@ function obstacles(){
 
 
 
-
+  // fifth layer
   newGrid[12][22] = 3;
   newGrid[13][22] = 3;
   newGrid[14][22] = 3;
@@ -210,6 +211,21 @@ function obstacles(){
   newGrid[15][21] = 3;
   newGrid[16][21] = 3;
   newGrid[17][21] = 3;
+
+  // sixth layer
+
+  newGrid[10][14] = 3;
+  newGrid[11][14] = 3;
+  newGrid[12][14] = 3;
+  newGrid[13][14] = 3;
+  newGrid[14][14] = 3;
+
+  newGrid[10][18] = 3;
+  newGrid[11][18] = 3;
+  newGrid[12][18] = 3;
+  newGrid[13][18] = 3;
+  newGrid[14][18] = 3;
+  
 
 
 
