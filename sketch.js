@@ -26,9 +26,7 @@ let pathImg;
 let x;
 let y;
 let bullet_hit;
-let bullet;
 let state = "right";
-
 let newGrid = [];
 
 
@@ -107,7 +105,7 @@ function displayGrid(){
         image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if(grid[y][x] === 2){
-        fill(0);
+        fill("blue");
         square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
       else if(grid[y][x] === 3){
@@ -130,7 +128,7 @@ function generateRandomGrid() {
       }
     }
   }
-  stroke("black");
+  noStroke();
   obstacles();
   return newGrid;
 }
@@ -142,15 +140,15 @@ function generateRandomGrid() {
 
 function obstacles(){
   // first walls
-  newGrid[1][3] = 2;
-  newGrid[2][3] = 2;
-  newGrid[3][3] = 2;
-  newGrid[4][3] = 2;
+  newGrid[1][3] = 3;
+  newGrid[2][3] = 3;
+  newGrid[3][3] = 3;
+  newGrid[4][3] = 3;
 
-  newGrid[13][30] = 2;
-  newGrid[14][30] = 2;
-  newGrid[15][30] = 2;
-  newGrid[16][30] = 2;
+  newGrid[13][30] = 3;
+  newGrid[14][30] = 3;
+  newGrid[15][30] = 3;
+  newGrid[16][30] = 3;
 
   
   
@@ -214,22 +212,21 @@ function obstacles(){
 
   // sixth layer
 
+  newGrid[7][14] = 2;
+  newGrid[8][14] = 2;
+  newGrid[9][14] = 3;
   newGrid[10][14] = 3;
   newGrid[11][14] = 3;
   newGrid[12][14] = 3;
   newGrid[13][14] = 3;
-  newGrid[14][14] = 3;
 
-  newGrid[10][18] = 3;
-  newGrid[11][18] = 3;
-  newGrid[12][18] = 3;
-  newGrid[13][18] = 3;
-  newGrid[14][18] = 3;
-  
-
-
-
-
+  newGrid[4][19] = 3;
+  newGrid[5][19] = 3;
+  newGrid[6][19] = 3;
+  newGrid[7][19] = 3;
+  newGrid[8][19] = 3;
+  newGrid[9][19] = 2;
+  newGrid[10][19] = 2; 
 }
 
 
@@ -337,6 +334,8 @@ function playerHPChange(){
 
   
   
+
+// work on the hp change, bullet loading, barriers like splicing and stuff
   
   
   
