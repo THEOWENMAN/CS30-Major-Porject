@@ -21,8 +21,7 @@
 
 let guests, shared, my;
 let grid, rows, cols;
-let grassImg;
-let pathImg;
+let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
 let x;
 let y;
 let bullet_hit;
@@ -46,6 +45,8 @@ function preload(){
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
   pathImg = loadImage("Grass Texture 1.jpg");
+  boxBarrierImg = loadImage("cratetex.png");
+  waterBarrierImg = loadImage("texture26.png");
 };
 
 
@@ -106,11 +107,11 @@ function displayGrid(){
       }
       else if(grid[y][x] === 2){
         fill("blue");
-        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+        image(waterBarrierImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if(grid[y][x] === 3){
         fill(255);
-        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+        image(boxBarrierImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
     }
   }
@@ -137,7 +138,7 @@ function generateRandomGrid() {
 
 
 
-
+// create textfile and loop if so it prints out each one with the text file
 function obstacles(){
   // first walls
   newGrid[1][3] = 3;
@@ -149,9 +150,6 @@ function obstacles(){
   newGrid[14][30] = 3;
   newGrid[15][30] = 3;
   newGrid[16][30] = 3;
-
-  
-  
 
   // second layer
   newGrid[13][5] = 3;
