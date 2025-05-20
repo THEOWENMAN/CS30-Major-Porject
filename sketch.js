@@ -55,10 +55,23 @@ function setup(){
   cols = Math.ceil(34);
   rows = Math.ceil(18);
   grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
-  my.character = {x: random(width), y: random(height), HP: 100};
   partySubscribe("createBullet", onCreateBullet);
   my.id = Math.floor(Math.random()*100000);
+  placement();
 };
+
+function placement(){
+  if(state === "right"){
+    my.character = {x: width - 50, y: height/2, HP: 100};
+    my.color = "red";
+    state = "left";
+  }
+  else{
+    my.character = {x: 50, y: height/2, HP: 100};
+    my.color = "blue";
+    state = "right";
+  }
+}
 
 function draw(){
   background(220);
@@ -69,7 +82,7 @@ function draw(){
   // drawCharacter(my.character, "blue");
   for (let guest of guests){
     if(guest.character){
-      drawCharacter(guest.character, "red");
+      drawCharacter(my.character, my.color);
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x + 20, guest.character.y + 20);
@@ -334,6 +347,7 @@ function playerHPChange(){
   
 
 // work on the hp change, bullet loading, barriers like splicing and stuff
+
   
   
   
