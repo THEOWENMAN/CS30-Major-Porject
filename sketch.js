@@ -19,13 +19,12 @@
 // https://www.google.com/url?sa=i&url=https%3A%2F%2Fx.com%2FAshClashYT%2Fstatus%2F1247935700911239169&psig=AOvVaw2f7hXbBRXKyqpEXrldXI4V&ust=1746560725130000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiHyPKLjY0DFQAAAAAdAAAAABAk
 
 
-let guests, shared, my;
+let guests, shared, my, sharedState;
 let grid, rows, cols;
 let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
 let x;
 let y;
 let bullet_hit;
-let state = "right";
 let newGrid = [];
 
 
@@ -41,6 +40,7 @@ const OPEN_TILE_TWO = 1;
 function preload(){
   partyConnect("wss://demoserver.p5Party.org");
   shared = partyLoadShared("shared", {bullets: []});
+  sharedState = partyLoadShared("state", {state: "right"}); 
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
@@ -56,20 +56,20 @@ function setup(){
   rows = Math.ceil(18);
   grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
   partySubscribe("createBullet", onCreateBullet);
-  my.id = Math.floor(Math.random()*100000);
-  placement();
+  my.id = Math.floor(Math.random() * 100000);
+  // placement();
 };
 
 function placement(){
-  if(state === "right"){
+  if(sharedState === "right"){
     my.character = {x: width - 50, y: height/2, HP: 100};
     my.color = "red";
-    state = "left";
+    sharedState = "left";
   }
   else{
     my.character = {x: 50, y: height/2, HP: 100};
     my.color = "blue";
-    state = "right";
+    sharedState = "right";
   }
 }
 
@@ -78,11 +78,17 @@ function draw(){
   moveMyCharacter();
   displayGrid();
   playerHPChange();
-  // character has one my and guest character.
-  // drawCharacter(my.character, "blue");
+
+  // draw my own character
+  drawCharacter(my.character, my.color);
+  fill(0);
+  textSize(16);
+  text("HP: " + my.character.HP, my.character.x + 20, my.character.y + 20);
+
+  // draw all guest players
   for (let guest of guests){
     if(guest.character){
-      drawCharacter(my.character, my.color);
+      drawCharacter(guest.character, guest.color);
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x + 20, guest.character.y + 20);
