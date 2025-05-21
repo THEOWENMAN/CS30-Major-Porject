@@ -57,19 +57,19 @@ function setup(){
   grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
   partySubscribe("createBullet", onCreateBullet);
   my.id = Math.floor(Math.random() * 100000);
-  // placement();
+  placement();
 };
 
 function placement(){
-  if(sharedState === "right"){
+  if(sharedState.state === "right"){
     my.character = {x: width - 50, y: height/2, HP: 100};
     my.color = "red";
-    sharedState = "left";
+    sharedState.state = "left";
   }
   else{
     my.character = {x: 50, y: height/2, HP: 100};
     my.color = "blue";
-    sharedState = "right";
+    sharedState.state  = "right";
   }
 }
 
@@ -334,6 +334,7 @@ function playerHPChange(){
       if(dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y)< DIAMETERPLAYER/2){
         my.character.HP -= 10;
         bullet_hit = true;
+        //break
       }
     }
 
@@ -341,6 +342,7 @@ function playerHPChange(){
       if(guest.character && guest.character.HP > 0 && bullet.creatorId !== my.id && dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y) < DIAMETERPLAYER/2){
         guest.character.HP -= 10;
         bullet_hit = true;
+        //break
       }
     }
     if(bullet_hit){
@@ -358,7 +360,13 @@ function playerHPChange(){
   
   
   
+function checkWinner(){
+  //winners
 
+  //losers
+}
+
+// start screen one does join team red, other deos join team blue, set the teams that they cannot shoot eachother and when they die do the you died screen then pop back to start screen
 
 
 
@@ -376,4 +384,11 @@ function playerHPChange(){
 
 
 
+
+// IF win the player is by themselves and then put win screen 
+// IF the player HP gets to 0, lose screen appears
+
+// basic version restart the browser to restart the game
+
+// teaming, red id is with red team, blue if is with blue team: if player != teamred or something
 

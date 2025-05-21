@@ -7,7 +7,7 @@ Tussle Galaxy: A multiplayer 2D shooter game inspired by Brawl Stars. The Game w
 - Multiplayer (p5.Party): Real-time multiplayer battles joining via other devices.
 - Map/Mode: Incorporate a simple map that allows player movenment and shooting, while having multiple obstacles. 
 - Sound Effects: Sound effects for the character shooting and epic game music.
-- Shooting Function: Using mouse to aim and shoot bullets.
+- Shooting Function: Using mouse to aim and shoot bullets. DONEEEEEEEEEEEE
 - Health Function: Include a basic health system, players can take damage and get knocked out.
 - Respawn and End Condition: Either respawn the players for a set amount of time or end if one team is all wiped out.
 - Simpler UI: Show player health, player bullet count, character selection, game state(start/lose/win)
