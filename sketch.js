@@ -5,32 +5,24 @@
 // // Extra for Experts:
 // // - describe what you did to take this project "above and beyond"
 
-// land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
-// make player draw left one, then draw right one, same for the color
-// center the battle field, so change all the obstacles and restriction to releative
-// fix the bullet hp change
-
-
-// make a start screen; when 2 players are in, can click start and others can't join until round is over
-
-
-
-
 // https://www.google.com/url?sa=i&url=https%3A%2F%2Fx.com%2FAshClashYT%2Fstatus%2F1247935700911239169&psig=AOvVaw2f7hXbBRXKyqpEXrldXI4V&ust=1746560725130000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiHyPKLjY0DFQAAAAAdAAAAABAk
 
 
 let guests, shared, my, sharedState;
 let grid, rows, cols;
 let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
-let x;
-let y;
+let x, y;
 let bullet_hit;
 let newGrid = [];
+let reloadTime = 1000;
+let switchTime = 0;
+let time = 0;
 
 
 
 
-const MOVEMENT = 3;
+
+const MOVEMENT = 1.5;
 const DIAMETERPLAYER = 30;
 const CELL_SIZE = 40;
 const OPEN_TILE = 0;
@@ -83,7 +75,7 @@ function draw(){
   drawCharacter(my.character, my.color);
   fill(0);
   textSize(16);
-  text("HP: " + my.character.HP, my.character.x + 20, my.character.y + 20);
+  // text("HP: " + my.character.HP, my.character.x, my.character.y + 40);
 
   // draw all guest players
   for (let guest of guests){
@@ -91,7 +83,8 @@ function draw(){
       drawCharacter(guest.character, guest.color);
       fill(0);
       textSize(16);
-      text("HP: " + guest.character.HP, guest.character.x + 20, guest.character.y + 20);
+      text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
+      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 40);
     }
   }
 
@@ -102,7 +95,7 @@ function draw(){
 
   
   for(let bullet of shared.bullets){
-    bullet.opacity -= 2;
+    bullet.opacity -= 3;
     fill(0,0,0,bullet.opacity);
     noStroke();
     ellipse(bullet.pos.x, bullet.pos.y, 10);
@@ -272,15 +265,20 @@ function drawCharacter(character, color){
 }
 
 function mousePressed(){
-  console.log("mouse is pressed");
-  let bullet = createBullet();
-  partyEmit("createBullet", bullet);
+  if (millis() > switchTime + reloadTime){
+    switchTime = millis();
+    console.log("mouse is pressed");
+    time = 1;
+    let bullet = createBullet();
+    partyEmit("createBullet", bullet);
+  } 
+  time = 0;
 }
 
 function createBullet(){
   let direction = createVector(mouseX - my.character.x, mouseY - my.character.y);
   direction.normalize();
-  direction.mult(4);
+  direction.mult(3);
   let position = createVector(my.character.x, my.character.y);
   position.x += direction.x * (40/4);
   position.y += direction.y * (40/4);
@@ -354,7 +352,7 @@ function playerHPChange(){
   
   
 
-// work on the hp change, bullet loading, barriers like splicing and stuff
+
 
   
   
@@ -367,28 +365,19 @@ function checkWinner(){
 }
 
 // start screen one does join team red, other deos join team blue, set the teams that they cannot shoot eachother and when they die do the you died screen then pop back to start screen
-
-
-
-
-
-
-
-
+// work on the hp change, bullet loading, barriers like splicing and stuff
 // could add bushes and when player enter make their opacity   
 
-
-
-
-
-
-
-
-
-// IF win the player is by themselves and then put win screen 
-// IF the player HP gets to 0, lose screen appears
-
-// basic version restart the browser to restart the game
+// IF the player HP gets to 0, lose screen appears and stays there until there is one team left, then host restarts and players can rejoin, say blue or red winners
 
 // teaming, red id is with red team, blue if is with blue team: if player != teamred or something
+
+
+// for start screen make a button for only host and put it top right of the screen and when clicked the things start and the button disapers
+
+
+// land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
+// make player draw left one, then draw right one, same for the color
+// center the battle field, so change all the obstacles and restriction to releative
+// fix the bullet hp change and bullet speed/ reload
 
