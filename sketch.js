@@ -84,16 +84,13 @@ function draw(){
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
-      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 40);
+      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 55);
     }
   }
 
   if (partyIsHost()){
     startGame();
   }
-  // make the map sideways/ horizontal
-
-  
   for(let bullet of shared.bullets){
     bullet.opacity -= 3;
     fill(0,0,0,bullet.opacity);
@@ -268,11 +265,15 @@ function mousePressed(){
   if (millis() > switchTime + reloadTime){
     switchTime = millis();
     console.log("mouse is pressed");
-    time = 1;
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
+    time = 1;
   } 
-  time = 0;
+}
+
+function bulletReload(){
+
+
 }
 
 function createBullet(){
@@ -376,7 +377,7 @@ function checkWinner(){
 // for start screen make a button for only host and put it top right of the screen and when clicked the things start and the button disapers
 
 
-// land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
+// barriers: land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
 // make player draw left one, then draw right one, same for the color
 // center the battle field, so change all the obstacles and restriction to releative
 // fix the bullet hp change and bullet speed/ reload
