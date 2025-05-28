@@ -7,8 +7,37 @@
 
 // https://www.google.com/url?sa=i&url=https%3A%2F%2Fx.com%2FAshClashYT%2Fstatus%2F1247935700911239169&psig=AOvVaw2f7hXbBRXKyqpEXrldXI4V&ust=1746560725130000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiHyPKLjY0DFQAAAAAdAAAAABAk
 
+// start screen one does join team red, other deos join team blue, set the teams that they cannot shoot eachother and when they die do the you died screen then pop back to start screen
+// work on the hp change, bullet loading, barriers like splicing and stuff
+// could add bushes and when player enter make their opacity   
 
-let guests, shared, my, sharedState;
+// IF the player HP gets to 0, lose screen appears and stays there until there is one team left, then host restarts and players can rejoin, say blue or red winners
+
+// teaming, red id is with red team, blue if is with blue team: if player != teamred or something
+
+
+// for start screen make a button for only host and put it top right of the screen and when clicked the things start and the button disapers
+
+
+// barriers: land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
+// make player draw left one, then draw right one, same for the color
+// center the battle field, so change all the obstacles and restriction to releative
+// fix the bullet hp change and bullet speed/ reload
+
+
+
+
+// starting screen players join and says waiting screen and is spawned in but cant move or do anything, while host screen says press space bar to start Game, then turns the state that everyone can start playing
+
+
+
+
+
+
+
+
+// Declare global variables
+let guests, shared, my, sharedStatePlacement;
 let grid, rows, cols;
 let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
 let x, y;
@@ -18,21 +47,19 @@ let reloadTime = 1000;
 let switchTime = 0;
 let time = 0;
 
-
-
-
-
+// Declare constants
 const MOVEMENT = 1.5;
 const DIAMETERPLAYER = 30;
 const CELL_SIZE = 40;
 const OPEN_TILE = 0;
 const OPEN_TILE_TWO = 1;
 
-
+// Function preload p5-party, sounds, and images
 function preload(){
   partyConnect("wss://demoserver.p5Party.org");
   shared = partyLoadShared("shared", {bullets: []});
-  sharedState = partyLoadShared("state", {state: "right"}); 
+  sharedStatePlacement = partyLoadShared("state", {state: "right"}); 
+  sharedStateStart = partyLoadShared("state", {state: "waiting"}); 
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
@@ -41,32 +68,32 @@ function preload(){
   waterBarrierImg = loadImage("texture26.png");
 };
 
-
+// Set up the canvas, grids, playerid, and placements of the players
 function setup(){
-  createCanvas(34 * CELL_SIZE, 18 * CELL_SIZE);
   cols = Math.ceil(34);
   rows = Math.ceil(18);
+  createCanvas(cols * CELL_SIZE, rows * CELL_SIZE);
   grid = generateRandomGrid(cols * CELL_SIZE, rows * CELL_SIZE);
   partySubscribe("createBullet", onCreateBullet);
   my.id = Math.floor(Math.random() * 100000);
   placement();
 };
 
+// Alternates player placement right as red team, left as blue team
 function placement(){
-  if(sharedState.state === "right"){
+  if(sharedStatePlacement.state === "right"){
     my.character = {x: width - 50, y: height/2, HP: 100};
     my.color = "red";
-    sharedState.state = "left";
+    sharedStatePlacement.state = "left";
   }
   else{
     my.character = {x: 50, y: height/2, HP: 100};
     my.color = "blue";
-    sharedState.state  = "right";
+    sharedStatePlacement.state  = "right";
   }
 }
 
 function draw(){
-  background(220);
   moveMyCharacter();
   displayGrid();
   playerHPChange();
@@ -105,6 +132,16 @@ function draw(){
   }
 };
 
+
+
+
+
+
+
+
+
+
+// 
 function displayGrid(){
   for (let y = 0; y < rows; y++){
     for (let x = 0; x < cols; x++){
@@ -125,6 +162,7 @@ function displayGrid(){
     }
   }
 }
+
 
 function generateRandomGrid() {
   for (let y = 0; y < rows; y++) {
@@ -292,6 +330,64 @@ function createBullet(){
 
 }
 
+
+
+
+
+
+
+function playerHPChange(){
+  for(let i = shared.bullets.length - 1; i >= 0; i--){
+    let bullet = shared.bullets[i];
+    let bullet_hit = false;
+
+    if(bullet.creatorId !== my.id && my.character && my.character.HP > 0){
+      const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+      if( distance < DIAMETERPLAYER/2){
+        //set lowest value of hp to 0, so no negative
+        my.character.HP = max(0, my.character.HP- 10);
+        bullet_hit = true;
+      }
+    }
+
+    for(let guest of guests){
+      if(guest.character && guest.character.HP > 0 && bullet.creatorId !== guest.id && guest.id !== my.id){
+        const distance = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+        if( distance < DIAMETERPLAYER/2){
+          bullet_hit = true;
+          break;
+        }
+      }
+    }
+    if(bullet_hit){
+      shared.bullets.splice(i, 1);
+    }
+  }
+}
+
+  
+  
+
+
+
+  
+  
+  
+  
+function checkWinner(){
+  //winners
+
+  //losers
+}
+
+
+
+
+
+
+
+
+// Player movements and canvas restrictions
 function moveMyCharacter(){
   if (keyIsDown(87)||keyIsDown(UP_ARROW)) {//w
     my.character.y-=MOVEMENT;
@@ -319,66 +415,4 @@ function moveMyCharacter(){
     my.character.y = DIAMETERPLAYER/2;
   } 
 }
-
-
-
-
-
-function playerHPChange(){
-  for(let i = shared.bullets.length - 1; i >= 0; i--){
-    let bullet = shared.bullets[i];
-    let bullet_hit = false;
-
-    if(bullet.creatorId !== my.id && my.character.HP > 0){
-      if(dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y)< DIAMETERPLAYER/2){
-        my.character.HP -= 10;
-        bullet_hit = true;
-        //break
-      }
-    }
-
-    for(let guest of guests){
-      if(guest.character && guest.character.HP > 0 && bullet.creatorId !== my.id && dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y) < DIAMETERPLAYER/2){
-        guest.character.HP -= 10;
-        bullet_hit = true;
-        //break
-      }
-    }
-    if(bullet_hit){
-      shared.bullets.splice(i, 1);
-    }
-  }
-}
-
-  
-  
-
-
-
-  
-  
-  
-  
-function checkWinner(){
-  //winners
-
-  //losers
-}
-
-// start screen one does join team red, other deos join team blue, set the teams that they cannot shoot eachother and when they die do the you died screen then pop back to start screen
-// work on the hp change, bullet loading, barriers like splicing and stuff
-// could add bushes and when player enter make their opacity   
-
-// IF the player HP gets to 0, lose screen appears and stays there until there is one team left, then host restarts and players can rejoin, say blue or red winners
-
-// teaming, red id is with red team, blue if is with blue team: if player != teamred or something
-
-
-// for start screen make a button for only host and put it top right of the screen and when clicked the things start and the button disapers
-
-
-// barriers: land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
-// make player draw left one, then draw right one, same for the color
-// center the battle field, so change all the obstacles and restriction to releative
-// fix the bullet hp change and bullet speed/ reload
 
