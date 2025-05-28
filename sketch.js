@@ -37,7 +37,7 @@
 
 
 // Declare global variables
-let guests, shared, my, sharedStatePlacement;
+let guests, shared, my, sharedStatePlacement, sharedStateStart;
 let grid, rows, cols;
 let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
 let x, y;
@@ -59,7 +59,7 @@ function preload(){
   partyConnect("wss://demoserver.p5Party.org");
   shared = partyLoadShared("shared", {bullets: []});
   sharedStatePlacement = partyLoadShared("state", {state: "right"}); 
-  sharedStateStart = partyLoadShared("state", {state: "waiting"}); 
+  sharedStateStart = partyLoadShared("states", {state: "waiting"}); 
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
@@ -94,29 +94,21 @@ function placement(){
 }
 
 function draw(){
+
+  if(sharedStateStart.state === "waiting"){
+    waitingScreen();
+  }
+  else if(sharedStateStart.state === "start"){
+    displayGrid();
+  }
   moveMyCharacter();
-  displayGrid();
+  drawCharacters();
   playerHPChange();
 
-  // draw my own character
-  drawCharacter(my.character, my.color);
-  fill(0);
-  textSize(16);
-  // text("HP: " + my.character.HP, my.character.x, my.character.y + 40);
-
-  // draw all guest players
-  for (let guest of guests){
-    if(guest.character){
-      drawCharacter(guest.character, guest.color);
-      fill(0);
-      textSize(16);
-      text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
-      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 55);
-    }
-  }
+  
 
   if (partyIsHost()){
-    startGame();
+    bulletInitialization();
   }
   for(let bullet of shared.bullets){
     bullet.opacity -= 3;
@@ -132,6 +124,35 @@ function draw(){
   }
 };
 
+function keyPressed(){
+  if(key === "c"){
+    sharedStateStart.state = "start";
+  }
+
+}
+
+
+function drawCharacters(){
+  drawCharacter(my.character, my.color);
+  fill(0);
+  textSize(16);
+  // text("HP: " + my.character.HP, my.character.x, my.character.y + 40);
+
+  // draw all guest players
+  for (let guest of guests){
+    if(guest.character){
+      drawCharacter(guest.character, guest.color);
+      fill(0);
+      textSize(16);
+      text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
+      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 55);
+    }
+  }
+}
+
+function waitingScreen(){
+  background(255);
+}
 
 
 
@@ -275,7 +296,7 @@ function obstacles(){
 }
 
 
-function startGame(){
+function bulletInitialization(){
   for(let bullet of shared.bullets){
     stepBullet(bullet);
   }
