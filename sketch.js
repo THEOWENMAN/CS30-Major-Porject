@@ -45,7 +45,7 @@ let bullet_hit;
 let newGrid = [];
 let reloadTime = 1000;
 let switchTime = 0;
-let time = 0;
+let isReloading = false;
 
 // Declare constants
 const MOVEMENT = 1.5;
@@ -57,7 +57,7 @@ const OPEN_TILE_TWO = 1;
 // Function preload p5-party, sounds, and images
 function preload(){
   partyConnect("wss://demoserver.p5Party.org");
-  shared = partyLoadShared("shared", {bullets: []});
+  shared = partyLoadShared("shared", {bullets: [], health:{}});
   sharedStatePlacement = partyLoadShared("state", {state: "right"}); 
   sharedStateStart = partyLoadShared("states", {state: "waiting"}); 
   my = partyLoadMyShared();
@@ -100,13 +100,17 @@ function draw(){
   }
   else if(sharedStateStart.state === "start"){
     displayGrid();
+    moveMyCharacter();
+    playerHPChange();
+    shootingInitilization();
   }
-  moveMyCharacter();
   drawCharacters();
-  playerHPChange();
+  // else if(sharedStateStart.state === "lose"){
+  //   losingScreen();
+  // }
+};
 
-  
-
+function shootingInitilization(){
   if (partyIsHost()){
     bulletInitialization();
   }
@@ -122,10 +126,13 @@ function draw(){
       shared.bullets.splice(i, 1);
     }
   }
-};
+}
+function losingScreen(){
+  background(255);
+}
 
 function keyPressed(){
-  if(key === "c"){
+  if(key === "c" && partyIsHost()){
     sharedStateStart.state = "start";
   }
 
@@ -145,7 +152,7 @@ function drawCharacters(){
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
-      text("reload: " + time, guest.character.x - 27.5, guest.character.y + 55);
+      text("reload: " + isReloading, guest.character.x - 27.5, guest.character.y + 55);
     }
   }
 }
@@ -320,13 +327,13 @@ function drawCharacter(character, color){
   ellipse(character.x, character.y, 40);
 }
 
+// !isReloading && 
 function mousePressed(){
   if (millis() > switchTime + reloadTime){
     switchTime = millis();
-    console.log("mouse is pressed");
+    isReloading = true;
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
-    time = 1;
   } 
 }
 
@@ -348,7 +355,6 @@ function createBullet(){
     opacity: 255,
     creatorId: my.id,
   };
-
 }
 
 
@@ -408,6 +414,12 @@ function checkWinner(){
 
 
 
+
+
+
+
+
+
 // Player movements and canvas restrictions
 function moveMyCharacter(){
   if (keyIsDown(87)||keyIsDown(UP_ARROW)) {//w
@@ -436,4 +448,9 @@ function moveMyCharacter(){
     my.character.y = DIAMETERPLAYER/2;
   } 
 }
+
+// hp change
+// teaming
+// reload time
+// barriers
 
