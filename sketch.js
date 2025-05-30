@@ -44,8 +44,8 @@ let x, y;
 let bullet_hit;
 let newGrid = [];
 let reloadTime = 1000;
-let switchTime = 0;
-let isReloading = false;
+
+
 
 // Declare constants
 const MOVEMENT = 1.5;
@@ -57,9 +57,9 @@ const OPEN_TILE_TWO = 1;
 // Function preload p5-party, sounds, and images
 function preload(){
   partyConnect("wss://demoserver.p5Party.org");
-  shared = partyLoadShared("shared", {bullets: [], health:{}});
-  sharedStatePlacement = partyLoadShared("state", {state: "right"}); 
-  sharedStateStart = partyLoadShared("states", {state: "waiting"}); 
+  shared = partyLoadShared("shared", {bullets: []});
+  sharedStatePlacement = partyLoadShared("placementState", {placement: "right"}); 
+  sharedStateStart = partyLoadShared("ScreenState", {screen: "waiting"}); 
   my = partyLoadMyShared();
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
@@ -77,28 +77,29 @@ function setup(){
   partySubscribe("createBullet", onCreateBullet);
   my.id = Math.floor(Math.random() * 100000);
   placement();
+  my.lastShotTime = 0;
 };
 
 // Alternates player placement right as red team, left as blue team
 function placement(){
-  if(sharedStatePlacement.state === "right"){
+  if(sharedStatePlacement.placement === "right"){
     my.character = {x: width - 50, y: height/2, HP: 100};
     my.color = "red";
-    sharedStatePlacement.state = "left";
+    sharedStatePlacement.placement = "left";
   }
   else{
     my.character = {x: 50, y: height/2, HP: 100};
     my.color = "blue";
-    sharedStatePlacement.state  = "right";
+    sharedStatePlacement.placement  = "right";
   }
 }
 
 function draw(){
 
-  if(sharedStateStart.state === "waiting"){
+  if(sharedStateStart.screen === "waiting"){
     waitingScreen();
   }
-  else if(sharedStateStart.state === "start"){
+  else if(sharedStateStart.screen === "start"){
     displayGrid();
     moveMyCharacter();
     playerHPChange();
@@ -133,7 +134,7 @@ function losingScreen(){
 
 function keyPressed(){
   if(key === "c" && partyIsHost()){
-    sharedStateStart.state = "start";
+    sharedStateStart.screen = "start";
   }
 
 }
@@ -143,7 +144,15 @@ function drawCharacters(){
   drawCharacter(my.character, my.color);
   fill(0);
   textSize(16);
-  // text("HP: " + my.character.HP, my.character.x, my.character.y + 40);
+  text("HP: " + my.character.HP, my.character.x - 27.5, my.character.y + 40);
+  let reloaded;
+  if(millis() - my.lastShotTime >= reloadTime){
+    reloaded = 1;
+  }
+  else{
+    reloaded = 0;
+  }
+  text("reload: " + reloaded, my.character.x - 27.5, my.character.y + 55);
 
   // draw all guest players
   for (let guest of guests){
@@ -152,13 +161,21 @@ function drawCharacters(){
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
-      text("reload: " + isReloading, guest.character.x - 27.5, guest.character.y + 55);
+      let guestReloaded;
+      if(millis() - guest.lastShotTime >= reloadTime){
+        guestReloaded = 1;
+      }
+      else{
+        guestReloaded = 0;
+      }
+      text("reload: " + guestReloaded, guest.character.x - 27.5, guest.character.y + 55);
     }
   }
 }
 
 function waitingScreen(){
   background(255);
+  text("WAITING FOR TO START..........");
 }
 
 
@@ -329,18 +346,14 @@ function drawCharacter(character, color){
 
 // !isReloading && 
 function mousePressed(){
-  if (millis() > switchTime + reloadTime){
-    switchTime = millis();
-    isReloading = true;
+  if (millis() - my.lastShotTime >= reloadTime){
+    my.lastShotTime = millis();
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
   } 
 }
 
-function bulletReload(){
 
-
-}
 
 function createBullet(){
   let direction = createVector(mouseX - my.character.x, mouseY - my.character.y);
@@ -360,7 +373,18 @@ function createBullet(){
 
 
 
-
+// returns team color based on the id of player
+function getPlayerColor(id){
+  if(id === my.id){
+    return my.color;
+  }
+  for(let guest of guests){
+    if(guest.id === id){
+      return guest.color;
+    }
+  }
+  return null;
+}
 
 
 function playerHPChange(){
@@ -369,20 +393,27 @@ function playerHPChange(){
     let bullet_hit = false;
 
     if(bullet.creatorId !== my.id && my.character && my.character.HP > 0){
-      const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-      if( distance < DIAMETERPLAYER/2){
-        //set lowest value of hp to 0, so no negative
-        my.character.HP = max(0, my.character.HP- 10);
-        bullet_hit = true;
+      let hostColor = getPlayerColor(bullet.creatorId);
+      if(hostColor && hostColor !== my.color){
+        const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+        if( distance < DIAMETERPLAYER/2){
+          //set lowest value of hp to 0, so no negative
+          my.character.HP = max(0, my.character.HP - 10);
+          bullet_hit = true;
+        }
       }
     }
 
     for(let guest of guests){
       if(guest.character && guest.character.HP > 0 && bullet.creatorId !== guest.id && guest.id !== my.id){
-        const distance = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-        if( distance < DIAMETERPLAYER/2){
-          bullet_hit = true;
-          break;
+        let hostColor = getPlayerColor(bullet.creatorId);
+        if(hostColor && hostColor !== guest.color){
+          const distance = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+          if( distance < DIAMETERPLAYER/2){
+            guest.character.HP = max(0, guest.character.HP - 10);
+            bullet_hit = true;
+            break;
+          }
         }
       }
     }
@@ -451,6 +482,7 @@ function moveMyCharacter(){
 
 // hp change
 // teaming
-// reload time
+// lose screen when character hits 0
+// make waiting screen look better
 // barriers
 
