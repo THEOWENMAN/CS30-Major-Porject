@@ -396,6 +396,7 @@ function playerHPChange(){
       let hostColor = getPlayerColor(bullet.creatorId);
       if(hostColor && hostColor !== my.color){
         const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+        console.log("distance", distance);
         if( distance < DIAMETERPLAYER/2){
           //set lowest value of hp to 0, so no negative
           my.character.HP = max(0, my.character.HP - 10);
@@ -408,8 +409,9 @@ function playerHPChange(){
       if(guest.character && guest.character.HP > 0 && bullet.creatorId !== guest.id && guest.id !== my.id){
         let hostColor = getPlayerColor(bullet.creatorId);
         if(hostColor && hostColor !== guest.color){
-          const distance = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-          if( distance < DIAMETERPLAYER/2){
+          const distance2 = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+          console.log("distance2", distance2);
+          if( distance2 < DIAMETERPLAYER/2){
             guest.character.HP = max(0, guest.character.HP - 10);
             bullet_hit = true;
             break;
