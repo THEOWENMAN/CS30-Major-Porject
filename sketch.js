@@ -44,6 +44,7 @@ let x, y;
 let bullet_hit;
 let newGrid = [];
 let reloadTime = 1000;
+let state = "normal";
 
 
 
@@ -105,10 +106,10 @@ function draw(){
     playerHPChange();
     shootingInitilization();
   }
+  else if(sharedStateStart.state === "lose"){
+    losingScreen();
+  }
   drawCharacters();
-  // else if(sharedStateStart.state === "lose"){
-  //   losingScreen();
-  // }
 };
 
 function shootingInitilization(){
@@ -175,7 +176,15 @@ function drawCharacters(){
 
 function waitingScreen(){
   background(255);
-  text("WAITING FOR TO START..........");
+  textSize(60);
+  text("WAITING FOR TO START..........", width/5, height/2);
+}
+
+function losingScreen(){
+  if(my.character.HP === 0){
+    state
+  }
+
 }
 
 
