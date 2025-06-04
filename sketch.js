@@ -39,7 +39,7 @@
 // Declare global variables
 let guests, shared, my, sharedStatePlacement, sharedStateStart;
 let grid, rows, cols;
-let grassImg, pathImg, boxBarrierImg, waterBarrierImg;
+let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg;
 let x, y;
 let bullet_hit;
 let newGrid = [];
@@ -67,6 +67,7 @@ function preload(){
   pathImg = loadImage("Grass Texture 1.jpg");
   boxBarrierImg = loadImage("cratetex.png");
   waterBarrierImg = loadImage("texture26.png");
+  waitingScreenImg = loadImage("waitingScreen.png");
 };
 
 // Set up the canvas, grids, playerid, and placements of the players
@@ -137,7 +138,6 @@ function keyPressed(){
   if(key === "c" && partyIsHost()){
     sharedStateStart.screen = "start";
   }
-
 }
 
 
@@ -167,9 +167,9 @@ function drawCharacters(){
 }
 
 function waitingScreen(){
-  background(255);
+  background(waitingScreenImg);
   textSize(60);
-  text("WAITING FOR TO START..........", width/5, height/2);
+  text("WAITING FOR Host TO START..........", width/5, height/2);
 }
 
 // function losingScreen(){
@@ -328,6 +328,12 @@ function bulletInitialization(){
 }
 
 function stepBullet(bullet){
+
+  if(!bullet.pos||!bullet.vel){
+    bullet.opacity = 0;
+    return;
+  }
+
   bullet.pos.x += bullet.vel.x;
   bullet.pos.y += bullet.vel.y;
 
