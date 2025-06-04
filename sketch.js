@@ -78,18 +78,18 @@ function setup(){
   partySubscribe("createBullet", onCreateBullet);
   my.id = Math.floor(Math.random() * 100000);
   placement();
-  my.lastShotTime = 0;
+  // my.character.lastShotTime = 0;
 };
 
 // Alternates player placement right as red team, left as blue team
 function placement(){
   if(sharedStatePlacement.placement === "right"){
-    my.character = {x: width - 50, y: height/2, HP: 100};
+    my.character = {x: width - 50, y: height/2, HP: 100, lastShotTime: 0};
     my.color = "red";
     sharedStatePlacement.placement = "left";
   }
   else{
-    my.character = {x: 50, y: height/2, HP: 100};
+    my.character = {x: 50, y: height/2, HP: 100, lastShotTime: 0};
     my.color = "blue";
     sharedStatePlacement.placement  = "right";
   }
@@ -147,7 +147,7 @@ function drawCharacters(){
   textSize(16);
   text("HP: " + my.character.HP, my.character.x - 27.5, my.character.y + 40);
   let reloaded;
-  if(millis() - my.lastShotTime >= reloadTime){
+  if(millis() - my.character.lastShotTime >= reloadTime){
     reloaded = 1;
   }
   else{
@@ -162,14 +162,6 @@ function drawCharacters(){
       fill(0);
       textSize(16);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
-      let guestReloaded;
-      if(millis() - guest.lastShotTime >= reloadTime){
-        guestReloaded = 1;
-      }
-      else{
-        guestReloaded = 0;
-      }
-      text("reload: " + guestReloaded, guest.character.x - 27.5, guest.character.y + 55);
     }
   }
 }
@@ -180,12 +172,12 @@ function waitingScreen(){
   text("WAITING FOR TO START..........", width/5, height/2);
 }
 
-function losingScreen(){
-  if(my.character.HP === 0){
-    state
-  }
+// function losingScreen(){
+//   if(my.character.HP === 0){
+//     state
+//   }
 
-}
+// }
 
 
 
@@ -338,6 +330,15 @@ function bulletInitialization(){
 function stepBullet(bullet){
   bullet.pos.x += bullet.vel.x;
   bullet.pos.y += bullet.vel.y;
+
+  let col = Math.floor(bullet.pos.x/CELL_SIZE);
+  let row = Math.floor(bullet.pos.y/CELL_SIZE);
+
+  if(grid[row] && grid[row][col] ===3){
+    bullet.opacity = 0;
+  }
+
+
 }
 
 function onCreateBullet(bullet){
@@ -355,8 +356,8 @@ function drawCharacter(character, color){
 
 // !isReloading && 
 function mousePressed(){
-  if (millis() - my.lastShotTime >= reloadTime){
-    my.lastShotTime = millis();
+  if (millis() - my.character.lastShotTime >= reloadTime){
+    my.character.lastShotTime = millis();
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
   } 
@@ -376,6 +377,7 @@ function createBullet(){
     vel: {x: direction.x, y: direction.y},
     opacity: 255,
     creatorId: my.id,
+    lastShotTime: millis(),
   };
 }
 
@@ -464,19 +466,30 @@ function checkWinner(){
 
 // Player movements and canvas restrictions
 function moveMyCharacter(){
+  let futureX = my.character.x;
+  let futureY = my.character.y;
+
   if (keyIsDown(87)||keyIsDown(UP_ARROW)) {//w
-    my.character.y-=MOVEMENT;
+    futureY -= MOVEMENT;
   }
   if (keyIsDown(65)||keyIsDown(LEFT_ARROW)) {//a
-    my.character.x-=MOVEMENT;
+    futureX -= MOVEMENT;
   }
   if (keyIsDown(83)||keyIsDown(DOWN_ARROW)) {//s
-    my.character.y+=MOVEMENT;
+    futureY += MOVEMENT;
   }
   if (keyIsDown(68)||keyIsDown(RIGHT_ARROW)) {//d
-    my.character.x+=MOVEMENT;
+    futureX += MOVEMENT;
   }
+
+  let col = Math.floor(futureX/CELL_SIZE);
+  let row = Math.floor(futureY/CELL_SIZE);
   
+  if (grid[row] && grid[row][col] !== 3 && grid[row][col] !== 2){
+    my.character.x = futureX;
+    my.character.y = futureY;
+  }
+
   if (my.character.x + DIAMETERPLAYER/2 > cols *CELL_SIZE){
     my.character.x = cols *CELL_SIZE - DIAMETERPLAYER/2;
   } 
