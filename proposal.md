@@ -4,7 +4,7 @@
 Tussle Galaxy: A multiplayer 2D shooter game inspired by Brawl Stars. The Game will be coded with p5.js and p5.party; players will join a shared lobby and battle using their unique characters.
 
 ## Needs to have List
-- Multiplayer (p5.Party): Real-time multiplayer battles joining via other devices.
+- Multiplayer (p5.Party): Real-time multiplayer battles joining via other devices. DONEEEEEEEEEEE
 - Map/Mode: Incorporate a simple map that allows player movenment and shooting, while having multiple obstacles. 
 - Sound Effects: Sound effects for the character shooting and epic game music.
 - Shooting Function: Using mouse to aim and shoot bullets. DONEEEEEEEEEEEE
