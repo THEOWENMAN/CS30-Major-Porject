@@ -13,23 +13,31 @@
 
 // IF the player HP gets to 0, lose screen appears and stays there until there is one team left, then host restarts and players can rejoin, say blue or red winners
 
-// teaming, red id is with red team, blue if is with blue team: if player != teamred or something
 
-
-// for start screen make a button for only host and put it top right of the screen and when clicked the things start and the button disapers
 
 
 // barriers: land with grass and stone, water as impassible but bullets can go through, stone wall cannot go through and bullet can't go through.
-// make player draw left one, then draw right one, same for the color
-// center the battle field, so change all the obstacles and restriction to releative
-// fix the bullet hp change and bullet speed/ reload
 
 
 
 
-// starting screen players join and says waiting screen and is spawned in but cant move or do anything, while host screen says press space bar to start Game, then turns the state that everyone can start playing
 
 
+// must doooooo
+// songs for waiting screen and sings during game
+// fix walls radius
+// losing screen 
+// respawn/end conditions
+// real images of players, not just circles
+// beta testing
+// cleaning code
+// comments and header
+// text file the barriers
+
+// can adddddddd
+// sound effects for characters
+// emotes and sprays
+// more maps and advanced powerups
 
 
 
@@ -39,7 +47,7 @@
 // Declare global variables
 let guests, shared, my, sharedStatePlacement, sharedStateStart;
 let grid, rows, cols;
-let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg;
+let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg, audioBulletShot;
 let x, y;
 let bullet_hit;
 let newGrid = [];
@@ -67,7 +75,8 @@ function preload(){
   pathImg = loadImage("Grass Texture 1.jpg");
   boxBarrierImg = loadImage("cratetex.png");
   waterBarrierImg = loadImage("texture26.png");
-  waitingScreenImg = loadImage("waitingScreen.png");
+  waitingScreenImg = loadImage("waitingScreen3.avif");
+  audioBulletShot = createAudio("laser-312360.mp3");
 };
 
 // Set up the canvas, grids, playerid, and placements of the players
@@ -97,7 +106,6 @@ function placement(){
 }
 
 function draw(){
-
   if(sharedStateStart.screen === "waiting"){
     waitingScreen();
   }
@@ -168,8 +176,12 @@ function drawCharacters(){
 
 function waitingScreen(){
   background(waitingScreenImg);
-  textSize(60);
-  text("WAITING FOR Host TO START..........", width/5, height/2);
+  fill(255);
+  textSize(85);
+  text("WAITING FOR Host TO START", 80, 150);
+  textSize(40);
+  text("Press 'C' to start", width/2-120, 300);
+  text("WASD to move, mouse button to shoot", width/2-300, 400);
 }
 
 // function losingScreen(){
@@ -366,6 +378,8 @@ function mousePressed(){
     my.character.lastShotTime = millis();
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
+    audioBulletShot.stop();
+    audioBulletShot.play();
   } 
 }
 
