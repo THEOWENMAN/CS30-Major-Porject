@@ -24,10 +24,10 @@
 
 
 // must doooooo
-// songs for waiting screen and sings during game
+// songs for waiting screen and sings during game 1
 // fix walls radius
-// losing screen 
-// respawn/end conditions
+// losing screen 1
+// respawn/end conditions 1
 // real images of players, not just circles
 // beta testing
 // cleaning code
@@ -37,7 +37,7 @@
 // can adddddddd
 // sound effects for characters
 // emotes and sprays
-// more maps and advanced powerups
+// more maps and advanced powerups/ turn the newGrids to textfile
 
 
 
@@ -47,7 +47,7 @@
 // Declare global variables
 let guests, shared, my, sharedStatePlacement, sharedStateStart;
 let grid, rows, cols;
-let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg, audioBulletShot;
+let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg, audioBulletShot, waitingScreenAudio, gameStartAudio;
 let x, y;
 let bullet_hit;
 let newGrid = [];
@@ -77,6 +77,8 @@ function preload(){
   waterBarrierImg = loadImage("texture26.png");
   waitingScreenImg = loadImage("waitingScreen3.avif");
   audioBulletShot = createAudio("laser-312360.mp3");
+  waitingScreenAudio = createAudio("waitScreenSong.mp3");
+  gameStartAudio = createAudio("gameStartSong.mp3");
 };
 
 // Set up the canvas, grids, playerid, and placements of the players
@@ -106,19 +108,29 @@ function placement(){
 }
 
 function draw(){
+  if(state === "lose"){
+    losingScreen();
+    return;
+  }
   if(sharedStateStart.screen === "waiting"){
     waitingScreen();
+    waitingScreenAudio.play();
   }
   else if(sharedStateStart.screen === "start"){
     displayGrid();
     moveMyCharacter();
     playerHPChange();
     shootingInitilization();
+    drawCharacters();
+    waitingScreenAudio.stop();
+    gameStartAudio.play();
+    waitingScreenAudio.play();
+    if(my.character.HP <= 0 && state !== "lose"){
+      state = "lose";
+      my.character.x = -100;
+    }
   }
-  else if(sharedStateStart.state === "lose"){
-    losingScreen();
-  }
-  drawCharacters();
+//
 };
 
 function shootingInitilization(){
@@ -138,13 +150,36 @@ function shootingInitilization(){
     }
   }
 }
-function losingScreen(){
-  background(255);
-}
+
 
 function keyPressed(){
   if(key === "c" && partyIsHost()){
     sharedStateStart.screen = "start";
+  }
+
+  if(key === "r" && partyIsHost()){
+    placement();
+    sharedStateStart.screen = "waiting";
+    my.character.HP = 100;
+    state = "normal";
+    for(let guest of guests){
+      if(guest.character){
+        if(sharedStatePlacement.placement === "right"){
+          guest.character.x = width - 50;
+          guest.character.y = height/2;
+          guest.color = "red";
+          sharedStatePlacement.placement = "left";
+        }
+        else{
+          guest.character.x = 50;
+          guest.character.y = height/2;
+          guest.color = "blue";
+          sharedStatePlacement.placement = "right";
+
+        }
+        guest.character.HP = 100;
+      }
+    }
   }
 }
 
@@ -184,10 +219,22 @@ function waitingScreen(){
   text("WASD to move, mouse button to shoot", width/2-300, 400);
 }
 
-// function losingScreen(){
-//   if(my.character.HP === 0){
-//     state
-//   }
+function losingScreen(){
+  background(0);
+  fill("red");
+  textAlign(CENTER,CENTER);
+  textSize(60);
+  text("YOU LOSE!", width/2, height/2 - 40);
+  textSize(30);
+  text("waiting for Host to press 'R' to restart");
+}
+
+
+// Gets player grid cell postion and checks its 3x3 surroundings to avoid collision
+// function PlayerWallDetection(){
+//   let playerCol = Math.floor(x)
+//   let playerRow
+  
 
 // }
 
@@ -378,8 +425,10 @@ function mousePressed(){
     my.character.lastShotTime = millis();
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
-    audioBulletShot.stop();
-    audioBulletShot.play();
+    if(sharedStateStart.screen === "start"){
+      audioBulletShot.stop();
+      audioBulletShot.play();
+    }
   } 
 }
 
