@@ -179,7 +179,6 @@ function keyPressed(){
           guest.character.y = height/2;
           guest.color = "blue";
           sharedStatePlacement.placement = "right";
-
         }
         guest.character.HP = 100;
       }
