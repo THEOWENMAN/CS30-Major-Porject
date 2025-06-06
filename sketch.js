@@ -138,6 +138,10 @@ function shootingInitilization(){
     bulletInitialization();
   }
   for(let bullet of shared.bullets){
+    // if(!bullet.pos.x || !bullet.pos.y){
+    //   bullet.opacity = 0;
+    //   return;
+    // }
     bullet.opacity -= 3;
     fill(0,0,0,bullet.opacity);
     noStroke();
@@ -157,7 +161,7 @@ function keyPressed(){
     sharedStateStart.screen = "start";
   }
 
-  if(key === "r" && partyIsHost()){
+  if(key === "r"){
     placement();
     sharedStateStart.screen = "waiting";
     my.character.HP = 100;
@@ -196,6 +200,7 @@ function drawCharacters(){
   else{
     reloaded = 0;
   }
+  textAlign(CENTER, CENTER);
   text("reload: " + reloaded, my.character.x - 27.5, my.character.y + 55);
 
   // draw all guest players
@@ -204,6 +209,7 @@ function drawCharacters(){
       drawCharacter(guest.character, guest.color);
       fill(0);
       textSize(16);
+      textAlign(CENTER, CENTER);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
     }
   }
@@ -226,7 +232,7 @@ function losingScreen(){
   textSize(60);
   text("YOU LOSE!", width/2, height/2 - 40);
   textSize(30);
-  text("waiting for Host to press 'R' to restart");
+  text("waiting for Host to press 'R' to restart", width/2, height/2-100);
 }
 
 
@@ -426,8 +432,8 @@ function mousePressed(){
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
     if(sharedStateStart.screen === "start"){
-      audioBulletShot.stop();
       audioBulletShot.play();
+      audioBulletShot.stop();
     }
   } 
 }
