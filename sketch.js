@@ -199,7 +199,6 @@ function drawCharacters(){
   else{
     reloaded = 0;
   }
-  textAlign(CENTER, CENTER);
   text("reload: " + reloaded, my.character.x - 27.5, my.character.y + 55);
 
   // draw all guest players
@@ -208,7 +207,6 @@ function drawCharacters(){
       drawCharacter(guest.character, guest.color);
       fill(0);
       textSize(16);
-      textAlign(CENTER, CENTER);
       text("HP: " + guest.character.HP, guest.character.x - 27.5, guest.character.y + 40);
     }
   }
@@ -510,33 +508,6 @@ function playerHPChange(){
   }
 }
 
-  
-  
-
-
-
-  
-  
-  
-  
-function checkWinner(){
-  //winners
-
-  //losers
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Player movements and canvas restrictions
 function moveMyCharacter(){
@@ -577,10 +548,4 @@ function moveMyCharacter(){
     my.character.y = DIAMETERPLAYER/2;
   } 
 }
-
-// hp change
-// teaming
-// lose screen when character hits 0
-// make waiting screen look better
-// barriers
 
