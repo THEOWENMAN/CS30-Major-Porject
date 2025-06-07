@@ -76,9 +76,9 @@ function preload(){
   boxBarrierImg = loadImage("cratetex.png");
   waterBarrierImg = loadImage("texture26.png");
   waitingScreenImg = loadImage("waitingScreen3.avif");
-  audioBulletShot = createAudio("laser-312360.mp3");
-  waitingScreenAudio = createAudio("waitScreenSong.mp3");
-  gameStartAudio = createAudio("gameStartSong.mp3");
+  // audioBulletShot = createAudio("laser-312360.mp3");
+  // waitingScreenAudio = createAudio("waitScreenSong.mp3");
+  // gameStartAudio = createAudio("gameStartSong.mp3");
 };
 
 // Set up the canvas, grids, playerid, and placements of the players
@@ -107,6 +107,8 @@ function placement(){
   }
 }
 
+
+
 function draw(){
   if(state === "lose"){
     losingScreen();
@@ -114,7 +116,7 @@ function draw(){
   }
   if(sharedStateStart.screen === "waiting"){
     waitingScreen();
-    waitingScreenAudio.play();
+    // waitingScreenAudio.play();
   }
   else if(sharedStateStart.screen === "start"){
     displayGrid();
@@ -123,8 +125,8 @@ function draw(){
     shootingInitilization();
     drawCharacters();
     waitingScreenAudio.stop();
-    gameStartAudio.play();
-    waitingScreenAudio.play();
+    // gameStartAudio.play();
+    // waitingScreenAudio.play();
     if(my.character.HP <= 0 && state !== "lose"){
       state = "lose";
       my.character.x = -100;
