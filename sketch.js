@@ -66,6 +66,7 @@ const OPEN_TILE_TWO = 1;
 // Function preload p5-party, sounds, and images
 function preload(){
   partyConnect("wss://demoserver.p5Party.org");
+  console.log("connected to server");
   shared = partyLoadShared("shared", {bullets: []});
   sharedStatePlacement = partyLoadShared("placementState", {placement: "right"}); 
   sharedStateStart = partyLoadShared("ScreenState", {screen: "waiting"}); 
@@ -124,7 +125,7 @@ function draw(){
     playerHPChange();
     shootingInitilization();
     drawCharacters();
-    waitingScreenAudio.stop();
+    // waitingScreenAudio.stop();
     // gameStartAudio.play();
     // waitingScreenAudio.play();
     if(my.character.HP <= 0 && state !== "lose"){
@@ -140,10 +141,6 @@ function shootingInitilization(){
     bulletInitialization();
   }
   for(let bullet of shared.bullets){
-    // if(!bullet.pos.x || !bullet.pos.y){
-    //   bullet.opacity = 0;
-    //   return;
-    // }
     bullet.opacity -= 3;
     fill(0,0,0,bullet.opacity);
     noStroke();
@@ -159,7 +156,7 @@ function shootingInitilization(){
 
 
 function keyPressed(){
-  if(key === "c" && partyIsHost()){
+  if(key === "c"){
     sharedStateStart.screen = "start";
   }
 
@@ -393,10 +390,10 @@ function bulletInitialization(){
 
 function stepBullet(bullet){
 
-  if(!bullet.pos||!bullet.vel){
-    bullet.opacity = 0;
-    return;
-  }
+  // if(!bullet.pos||!bullet.vel){
+  //   bullet.opacity = 0;
+  //   return;
+  // }
 
   bullet.pos.x += bullet.vel.x;
   bullet.pos.y += bullet.vel.y;
@@ -430,10 +427,10 @@ function mousePressed(){
     my.character.lastShotTime = millis();
     let bullet = createBullet();
     partyEmit("createBullet", bullet);
-    if(sharedStateStart.screen === "start"){
-      audioBulletShot.play();
-      audioBulletShot.stop();
-    }
+    // if(sharedStateStart.screen === "start"){
+    //   // audioBulletShot.play();
+    //   // audioBulletShot.stop();
+    // }
   } 
 }
 
