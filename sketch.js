@@ -466,6 +466,9 @@ function keyPressed(){
   if(key === "c" && partyIsHost()){
     sharedStateStart.screen = "start";
   }
+  if(key === "p" ){
+    if(grid[y][x] !== 2){}
+  }
   if(key === "r"){
     placement();
     sharedStateStart.screen = "waiting";
