@@ -11,7 +11,7 @@ Tussle Galaxy: A multiplayer 2D shooter game inspired by Brawl Stars. The Game w
 - Health Function: Include a basic health system, players can take damage and get knocked out.
 - Respawn and End Condition: Either respawn the players for a set amount of time or end if one team is all wiped out.
 - Simpler UI: Show player health, player bullet count reload, game state(start/lose/win)
-- Design: Create an aesthetic appealing game with actual character designs, textured maps, bullet colors, etc.
+- Design: Create an aesthetic appealing game with actual working characters, textured maps, bullet colors, etc.
 
 ## Nice to have List
 - Advance Designs: Include shooting animations, wall hit effects, polished visual style, and more.

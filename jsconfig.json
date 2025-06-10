@@ -1,10 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "es6"
-  },
   "include": [
     "*.js",
-    "**/*.js",
+    "libraries/*.js",
+<<<<<<< HEAD
     "/Users/owentang/.vscode/extensions/wmcicompsci.cs30-p5-1.9.0/p5types/global.d.ts"
+=======
+    "c:\\Users\\jihua\\.vscode\\extensions\\wmcicompsci.cs30-p5-1.9.0\\p5types\\global.d.ts"
+>>>>>>> c397ff900bb8fabf1086c0a5767f3f1c3074057c
   ]
 }
