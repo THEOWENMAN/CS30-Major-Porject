@@ -389,76 +389,29 @@ function generateRandomGrid() {
 
 // Self designed obstacles for map
 function obstacles(){
-  // first walls
-  newGrid[1][3] = 3;
-  newGrid[2][3] = 3;
-  newGrid[3][3] = 3;
-  newGrid[4][3] = 3;
-  newGrid[13][30] = 3;
-  newGrid[14][30] = 3;
-  newGrid[15][30] = 3;
-  newGrid[16][30] = 3;
-  // second layer
-  newGrid[13][5] = 3;
-  newGrid[14][5] = 3;
-  newGrid[15][5] = 3;
-  newGrid[15][6] = 3;
-  newGrid[16][6] = 3;
-  newGrid[2][28] = 3;
-  newGrid[3][28] = 3;
-  newGrid[4][28] = 3;
-  newGrid[2][27] = 3;
-  newGrid[1][27] = 3;
-  // third layer
-  newGrid[7][24] = 3;
-  newGrid[7][25] = 3;
-  newGrid[8][24] = 3;
-  newGrid[8][25] = 3;
-  newGrid[9][8] = 3;
-  newGrid[9][9] = 3;
-  newGrid[10][8] = 3;
-  newGrid[10][9] = 3;
-  // fourth layer
-  newGrid[0][12] = 3;
-  newGrid[1][12] = 3;
-  newGrid[2][12] = 3;
-  newGrid[3][12] = 3;
-  newGrid[4][12] = 3;
-  newGrid[5][12] = 3;
-  newGrid[0][11] = 3;
-  newGrid[1][11] = 3;
-  newGrid[2][11] = 3;
-  newGrid[3][11] = 3;
-  newGrid[4][11] = 3;
-  newGrid[5][11] = 3;
-  // fifth layer
-  newGrid[12][22] = 3;
-  newGrid[13][22] = 3;
-  newGrid[14][22] = 3;
-  newGrid[15][22] = 3;
-  newGrid[16][22] = 3;
-  newGrid[17][22] = 3;
-  newGrid[12][21] = 3;
-  newGrid[13][21] = 3;
-  newGrid[14][21] = 3;
-  newGrid[15][21] = 3;
-  newGrid[16][21] = 3;
-  newGrid[17][21] = 3;
-  // sixth layer
-  newGrid[7][14] = 2;
-  newGrid[8][14] = 2;
-  newGrid[9][14] = 3;
-  newGrid[10][14] = 3;
-  newGrid[11][14] = 3;
-  newGrid[12][14] = 3;
-  newGrid[13][14] = 3;
-  newGrid[4][19] = 3;
-  newGrid[5][19] = 3;
-  newGrid[6][19] = 3;
-  newGrid[7][19] = 3;
-  newGrid[8][19] = 3;
-  newGrid[9][19] = 2;
-  newGrid[10][19] = 2; 
+  let crates = [
+    //first walls
+    [1,3],[2,3],[3,3],[4,3],[13,30],[14,30],[15,30],[16,30],
+    //second walls
+    [13,5],[14,5],[15,5],[15,6],[16,6],[2,28],[3,28],[4,28],[2,27],[1,27],
+    //third walls
+    [7,24],[7,25],[8,24],[8,25],[9,8],[9,9],[10,8],[10,9],
+    //fourth walls
+    [0,12],[1,12],[2,12],[3,12],[4,12],[5,12],[0,11],[1,11],[2,11],[3,11],[4,11],[5,11],
+    //fifth walls
+    [12,22],[13,22],[14,22],[15,22],[16,22],[17,22],[12,21],[13,21],[14,21],[15,21],[15,21],[16,21],[17,21],
+    //sixth walls
+    [9,14],[10,14],[11,14],[12,14],[13,14],[4,19],[5,19],[6,19],[7,19],[8,19],
+  ];
+  let water = [
+    [7,14],[8,14],[9,19],[10,19],
+  ];
+  for(let [r,c] of crates){
+    newGrid[r][c] = 3;
+  }
+  for(let [r,c] of water){
+    newGrid[r][c] = 2;
+  }
 }
 
 // Press "C" to start the game and "R" to reset the game
