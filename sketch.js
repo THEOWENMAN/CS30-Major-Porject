@@ -10,21 +10,14 @@
 
 // presentation- what I did, how I did it- give an overview and talk about some of the specifc 
 // beta testing
-
-
-//extras:
-// emotes and sprays
-
-
-
-
+// reflection
 
 
 // DECLARATION SECTION:
 // Declare global variables
 let guests, shared, my, sharedStatePlacement, sharedStateStart;
 let grid, rows, cols;
-let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg, audioBulletShot, waitingScreenAudio, gameStartAudio;
+let grassImg, pathImg, boxBarrierImg, waterBarrierImg, waitingScreenImg, audioBulletShot, waitingScreenAudio, gameStartAudio, thumbsDownImg;
 let x, y;
 let bullet_hit;
 let newGrid = [];
@@ -51,6 +44,7 @@ function preload(){
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
   pathImg = loadImage("Grass Texture 1.jpg");
+  thumbsDownImg = loadImage("thumbs down.png");
   boxBarrierImg = loadImage("cratetex.png");
   waterBarrierImg = loadImage("texture26.png");
   waitingScreenImg = loadImage("waitingScreen3.avif");
@@ -88,6 +82,7 @@ function placement(){
 
 // Main loop, checks state and runs songs, displays, and other functions
 function draw(){
+  background(255);
   if(state === "lose"){
     losingScreen();
     return;
@@ -179,7 +174,9 @@ function waitingScreen(){
   text("WAITING FOR Host TO START", 680, 150);
   textSize(40);
   text("Press 'C' to start", 700, 300);
-  text("WASD to move, mouse button to shoot", 680, 400);
+  text("Press 'p' to emote, press 'u' to delete emote", 680, 400);
+  text("WASD to move, mouse button to shoot", 680, 500);
+  text("brown box = crates, blue square = water", 680, 600);
 }
 
 // Losing screen background and text
@@ -263,38 +260,41 @@ function getPlayerColor(id){
 function playerHPChange(){
   for(let i = shared.bullets.length - 1; i >= 0; i--){
     let bullet = shared.bullets[i];
-    let bullet_hit = false;
-    // own character
-    if(bullet.creatorId !== my.id && my.character && my.character.HP > 0){
-      let hostColor = getPlayerColor(bullet.creatorId);
-      if(hostColor && hostColor !== my.color){
-        const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-        console.log("distance", distance);
-        if( distance < DIAMETERPLAYER/2){
-          //set lowest value of hp to 0, so no negative
-          my.character.HP = max(0, my.character.HP - 10);
-          bullet_hit = true;
-        }
-      }
-    }
-    // guest character
-    for(let guest of guests){
-      if(guest.character && guest.character.HP > 0 && bullet.creatorId !== guest.id && guest.id !== my.id){
+    if(!bullet.hit){
+      let bullet_hit = false;
+      // own character
+      if(bullet.creatorId !== my.id && my.character && my.character.HP > 0){
         let hostColor = getPlayerColor(bullet.creatorId);
-        if(hostColor && hostColor !== guest.color){
-          const distance2 = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-          console.log("distance2", distance2);
-          if( distance2 < DIAMETERPLAYER/2){
-            //set lowest value of hp to 0, so no negative 
-            guest.character.HP = max(0, guest.character.HP - 10);
+        if(hostColor && hostColor !== my.color){
+          const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
+          console.log("distance", distance);
+          if( distance < DIAMETERPLAYER/2){
+            //set lowest value of hp to 0, so no negative
+            my.character.HP = max(0, my.character.HP - 10);
             bullet_hit = true;
-            break;
           }
         }
       }
-    }
-    if(bullet_hit){
-      shared.bullets.splice(i, 1);
+      // guest character
+      for(let guest of guests){
+        if(guest.character && guest.character.HP > 0 && bullet.creatorId !== guest.id && guest.id !== my.id){
+          let hostColor = getPlayerColor(bullet.creatorId);
+          if(hostColor && hostColor !== guest.color){
+            const distance2 = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
+            console.log("distance2", distance2);
+            if( distance2 < DIAMETERPLAYER/2){
+              //set lowest value of hp to 0, so no negative 
+              guest.character.HP = max(0, guest.character.HP - 10);
+              bullet_hit = true;
+              break;
+            }
+          }
+        }
+      }
+      if(bullet_hit){
+        bullet.hit = true;
+        shared.bullets.splice(i, 1);
+      }
     }
   }
 }
@@ -343,6 +343,7 @@ function createBullet(){
     vel: {x: direction.x, y: direction.y},
     opacity: 255,
     creatorId: my.id,
+    hit: false,
     lastShotTime: millis(),
   };
 }
@@ -364,6 +365,10 @@ function displayGrid(){
       else if(grid[y][x] === 3){
         fill(255);
         image(boxBarrierImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+      else if(grid[y][x] === 5){
+        fill(255);
+        image(thumbsDownImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
     }
   }
@@ -414,13 +419,26 @@ function obstacles(){
   }
 }
 
-// Press "C" to start the game and "R" to reset the game
+// Press "C" to start the game, "R" to reset the game, "p to emote", and "u" to delete emote
 function keyPressed(){
+  let col = Math.floor(my.character.x/CELL_SIZE);
+  let row = Math.floor(my.character.y/CELL_SIZE);
   if(key === "c" && partyIsHost()){
     sharedStateStart.screen = "start";
   }
   if(key === "p" ){
-    if(grid[y][x] !== 2){}
+    if(grid[row][col] !== 2 && grid[row][col] !== 3){
+      grid[row][col] = 5;
+    }
+  }
+  if(key==="u"){
+    for(let y = 0; y < rows; y++){
+      for(let x = 0; x < cols; x++){
+        if(grid[y][x] === 5){
+          grid[y][x] = 0;
+        }
+      }
+    }
   }
   if(key === "r"){
     placement();

@@ -8,4 +8,6 @@
 - good
 - bad
 
-# Known Bugs
+# Known Bugs:
+
+When moving and if a bullet hits, the frames update too slow therfore taking more than 10 HP for one bullet
