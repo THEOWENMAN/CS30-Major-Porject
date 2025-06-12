@@ -6,7 +6,9 @@ If I were to start this project again, I would begin with a thorough design of t
 ## Was everything in the "needs to have" completed?
 I was able to accomplish the basic functionality/”Needs to Have” code. For example, multiplayer logic from the p5 party, a simple map with obstacles, collision detection, character movement, and more. I also added the sprays/emotes code from the "Nice to Have" goals.
 
-
 ## What was the hardest part of the project?
+The hardest part of the project was implementing the p5 party multiplayer library to enable real-time synchronization between players. I had previously attempted to code Brawl Stars in my object and array notation project. Due to limited time and a lack of understanding of shared state management, I had to abandon the project. For this project, I spent time and effort thoroughly studying the p5 party documentation and exploring some of the example codes. The shared variables such as the bullets or screen states had slightly different logic versus the client-specific state. 
+I would often mix the two up so the reload indicators, audio cues, and other user interface issues appeared more often. Last, due to the nature of the p5 party's server and multiplier synchronization, debugging the issues took more time than expected because they were either my coding mistakes or the p5 party's inability to load causing variables to be undefined and forcing me to rely on console logging and trail-and-error.
 
 ## Were there any problems I couldn't solve?
+One persistent problem I was unable to fix was the random undefined errors related to the bullet objects. These errors appeared inconsistently and at different lines of code, like bullet.pos.x, bullet.vel.x, etc. The problem would appear even with countermeasures like a quick if-statement to null-check the bullet and delete it from the array. The irregularity of the errors may be related to the p5 party server latency or other synchronization issues, which then cause the bullet array to be undefined. Even though a quick screen refresh can reset and fix the issues, the problem remains unresolved due to the inconsistent bugs.
