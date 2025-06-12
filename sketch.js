@@ -96,7 +96,6 @@ function draw(){
     loseState();
     waitingScreenAudio.stop();
     gameStartAudio.play();
-    waitingScreenAudio.play();
   }
 };
 
@@ -263,7 +262,6 @@ function playerHPChange(){
         let hostColor = getPlayerColor(bullet.creatorId);
         if(hostColor && hostColor !== my.color){
           const distance = dist(bullet.pos.x, bullet.pos.y, my.character.x, my.character.y);
-          console.log("distance", distance);
           if( distance < DIAMETERPLAYER/2){
             //set lowest value of hp to 0, so no negative
             my.character.HP = max(0, my.character.HP - 10);
@@ -277,7 +275,6 @@ function playerHPChange(){
           let hostColor = getPlayerColor(bullet.creatorId);
           if(hostColor && hostColor !== guest.color){
             const distance2 = dist(bullet.pos.x, bullet.pos.y, guest.character.x, guest.character.y);
-            console.log("distance2", distance2);
             if( distance2 < DIAMETERPLAYER/2){
               //set lowest value of hp to 0, so no negative 
               guest.character.HP = max(0, guest.character.HP - 10);
@@ -427,23 +424,15 @@ function keyPressed(){
       grid[row][col] = SPRAY_EMOTE;
     }
   }
-  if(key==="u"){
+  if(key === "u"){
     for(let y = 0; y < rows; y++){
       for(let x = 0; x < cols; x++){
         if(grid[y][x] !==2 && grid[y][x] !==3){
-<<<<<<< HEAD
-          if((x+y) % 2 === 0) {
-            grid[y][x] = 0;
-          }
-          else{
-            grid[y][x] = 1;
-=======
           if((x+y) % 2 === OPEN_TILE) {
             grid[y][x] = OPEN_TILE;
           }
           else{
             grid[y][x] = OPEN_TILE_TWO;
->>>>>>> e5adfe9efe9f2cddd89b1f6de1b00a915e7760d9
           }
         }
       }
@@ -486,19 +475,3 @@ function mousePressed(){
     }
   } 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
