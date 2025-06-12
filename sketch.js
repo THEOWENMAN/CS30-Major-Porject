@@ -6,13 +6,6 @@
 // - Researched and used mini functions such as max() and id to enhance the code
 
 
-
-
-// presentation- what I did, how I did it- give an overview and talk about some of the specifc 
-// beta testing
-// reflection
-
-
 // DECLARATION SECTION:
 // Declare global variables
 let guests, shared, my, sharedStatePlacement, sharedStateStart;
@@ -44,7 +37,7 @@ function preload(){
   guests = partyLoadGuestShareds();
   grassImg = loadImage("grass.png");
   pathImg = loadImage("Grass Texture 1.jpg");
-  thumbsDownImg = loadImage("thumbs down.png");
+  thumbsDownImg = loadImage("smile.png");
   boxBarrierImg = loadImage("cratetex.png");
   waterBarrierImg = loadImage("texture26.png");
   waitingScreenImg = loadImage("waitingScreen3.avif");
@@ -434,8 +427,13 @@ function keyPressed(){
   if(key==="u"){
     for(let y = 0; y < rows; y++){
       for(let x = 0; x < cols; x++){
-        if(grid[y][x] === 5){
-          grid[y][x] = 0;
+        if(grid[y][x] !==2 && grid[y][x] !==3){
+          if((x+y) % 2 === 0) {
+            grid[y][x] = 0;
+          }
+          else{
+            grid[y][x] = 1;
+          }
         }
       }
     }
