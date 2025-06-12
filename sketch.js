@@ -23,6 +23,9 @@ const DIAMETERPLAYER = 30;
 const CELL_SIZE = 40;
 const OPEN_TILE = 0;
 const OPEN_TILE_TWO = 1;
+const WATER_OBSTACLE = 2;
+const CRATE_OBSTACLE = 3;
+const SPRAY_EMOTE = 5;
 
 
 // PRELOAD AND SETUP SECTION:
@@ -116,10 +119,10 @@ function drawCharacters(){
   textAlign(CENTER,CENTER);
   let reloaded;
   if(millis() - my.character.lastShotTime >= reloadTime){
-    reloaded = 1;
+    reloaded = OPEN_TILE_TWO;
   }
   else{
-    reloaded = 0;
+    reloaded = OPEN_TILE;
   }
   text("reload: " + reloaded, my.character.x, my.character.y + 55);
   // draw all guest players
@@ -311,15 +314,15 @@ function bulletInitialization(){
 // Bullet movement and deletes bullet if hit obstacles
 function stepBullet(bullet){
   if(!bullet.pos||!bullet.vel){
-    bullet.opacity = 0;
+    bullet.opacity = OPEN_TILE;
     return;
   }
   bullet.pos.x += bullet.vel.x;
   bullet.pos.y += bullet.vel.y;
   let col = Math.floor(bullet.pos.x/CELL_SIZE);
   let row = Math.floor(bullet.pos.y/CELL_SIZE);
-  if(grid[row] && grid[row][col] ===3){
-    bullet.opacity = 0;
+  if(grid[row] && grid[row][col] === CRATE_OBSTACLE){
+    bullet.opacity = OPEN_TILE;
   }
 }
 
@@ -351,15 +354,15 @@ function displayGrid(){
       else if(grid[y][x] === OPEN_TILE_TWO){
         image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      else if(grid[y][x] === 2){
+      else if(grid[y][x] === WATER_OBSTACLE){
         fill("blue");
         image(waterBarrierImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      else if(grid[y][x] === 3){
+      else if(grid[y][x] === CRATE_OBSTACLE){
         fill(255);
         image(boxBarrierImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      else if(grid[y][x] === 5){
+      else if(grid[y][x] === SPRAY_EMOTE){
         fill(255);
         image(thumbsDownImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
@@ -372,7 +375,7 @@ function generateRandomGrid() {
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
-      if ((x+y) % 2 === 0) {
+      if ((x+y) % 2 === OPEN_TILE) {
         newGrid[y].push(OPEN_TILE);
       }
       else {
@@ -405,10 +408,10 @@ function obstacles(){
     [7,14],[8,14],[9,19],[10,19],
   ];
   for(let [r,c] of crates){
-    newGrid[r][c] = 3;
+    newGrid[r][c] = CRATE_OBSTACLE;
   }
   for(let [r,c] of water){
-    newGrid[r][c] = 2;
+    newGrid[r][c] = WATER_OBSTACLE;
   }
 }
 
@@ -420,19 +423,19 @@ function keyPressed(){
     sharedStateStart.screen = "start";
   }
   if(key === "p" ){
-    if(grid[row][col] !== 2 && grid[row][col] !== 3){
-      grid[row][col] = 5;
+    if(grid[row][col] !== WATER_OBSTACLE && grid[row][col] !== CRATE_OBSTACLE){
+      grid[row][col] = SPRAY_EMOTE;
     }
   }
   if(key==="u"){
     for(let y = 0; y < rows; y++){
       for(let x = 0; x < cols; x++){
         if(grid[y][x] !==2 && grid[y][x] !==3){
-          if((x+y) % 2 === 0) {
-            grid[y][x] = 0;
+          if((x+y) % 2 === OPEN_TILE) {
+            grid[y][x] = OPEN_TILE;
           }
           else{
-            grid[y][x] = 1;
+            grid[y][x] = OPEN_TILE_TWO;
           }
         }
       }

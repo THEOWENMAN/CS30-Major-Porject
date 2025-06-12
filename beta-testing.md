@@ -15,7 +15,6 @@ Cons:
 - map is too redundant.
 - What is the purpose of the smiley face?
 
-
 ## Programmer's advice
 Pros:
 - Simple easy to understand controls
@@ -23,31 +22,6 @@ Pros:
 - Good bullet speed (Fast enough to hit the other person, but also slow enough to be able to dodge)
 - I like the bullet fade
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-# Known Bugs:
-
-When moving and if a bullet hits, the frames update too slow therfore taking more than 10 HP for one bullet
-=======
-## Known Bugs
->>>>>>> Stashed changes
-=======
-## Known Bugs
->>>>>>> Stashed changes
-=======
-## Known Bugs
->>>>>>> Stashed changes
-=======
-## Known Bugs
->>>>>>> Stashed changes
-=======
-## Known Bugs
->>>>>>> Stashed changes
-=======
 Cons:
 - The water cell was a little confusing to understand, I did not understand that that texture was meant to be water.
 - End goal unclear (What do I get from eliminating the opponent?).
@@ -60,4 +34,4 @@ Cons:
 
 ## Known Bugs:
 - When moving and if a bullet hits, the frames update too slow therfore taking more than 10 HP for one bullet
->>>>>>> 52e46ea2172a91da12d63b930359f7b09321e268
+
