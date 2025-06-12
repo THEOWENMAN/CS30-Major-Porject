@@ -14,7 +14,10 @@ Cons:
 - Game looks too bland and simple.
 - map is too redundant.
 - What is the purpose of the smiley face?
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5adfe9efe9f2cddd89b1f6de1b00a915e7760d9
 
 ## Programmer's advice
 Pros:
@@ -32,6 +35,13 @@ Cons:
 - The menu music is a lot quieter than the gameplay music.
 - Health numbers are a little tricky to read, maybe a health bar would be better?
 - Moving diagonal is faster than when only moving up, left, right, or down (This could be a gameplay feature however).
+<<<<<<< HEAD
 
 ## Known Bugs:
 - When moving and if a bullet hits, the frames update too slow therfore taking more than 10 HP for one bullet
+=======
+
+## Known Bugs:
+- When moving and if a bullet hits, the frames update too slow therfore taking more than 10 HP for one bullet
+
+>>>>>>> e5adfe9efe9f2cddd89b1f6de1b00a915e7760d9
