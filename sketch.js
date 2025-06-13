@@ -169,9 +169,10 @@ function waitingScreen(){
   text("WAITING FOR Host TO START", 680, 150);
   textSize(40);
   text("Press 'C' to start", 700, 300);
-  text("Press 'p' to emote, press 'u' to delete emote", 680, 400);
-  text("WASD to move, mouse button to shoot", 680, 500);
-  text("brown box = crates, blue square = water", 680, 600);
+  text("Press 'p' to emote, press 'u' to delete emote", 680, 375);
+  text("WASD to move, mouse button to shoot", 680, 450);
+  text("brown box = crates, blue square = water", 680, 525);
+  text("If game is bugged, restart or relaunch", 680, 600);
 }
 
 // Losing screen background and text

@@ -1,6 +1,6 @@
 # Beta-Testing
 
-## Non-Programmer's advice:
+## Non-Programmer's Advice:
 Pros:
 - The multiplayer function makes the game more fun and social. 
 - The design or texture of the grid map looks nice.
@@ -15,7 +15,7 @@ Cons:
 - map is too redundant.
 - What is the purpose of the smiley face?
 
-## Programmer's advice
+## Programmer's Advice
 Pros:
 - Simple easy to understand controls
 - Good music selection and sound effects
